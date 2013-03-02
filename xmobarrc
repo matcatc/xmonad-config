@@ -1,0 +1,19 @@
+-- 
+
+Config { font = "xft:Georgia:Bold:pixelsize=13"
+--  font         = "fixed"
+       , bgColor      = "#000033"
+       , fgColor      = "grey"
+       , position     = TopW L 90
+       , lowerOnStart = True
+       , commands     = [ Run StdinReader
+			, Run Date "%a %b %_d %l:%M" "date" 10
+			, Run Com "echo 'Mail: N/A'" [] "mail" 0
+			, Run Com "echo 'Vol: muted'" [] "myVolume" 0
+			]
+       , sepChar      = "%"
+       , alignSep     = "}{"
+       , template     = " %StdinReader% }{ %mail% | %myVolume% | %date%"
+       }
+
+

@@ -61,7 +61,7 @@ myWorkspaces = map show [0..9] ++ sort ["mail", "music", "upgrade", "im", "backu
 
 -- main
 main = do
-	xmproc <- spawnPipe "xmobar"
+	xmproc <- spawnPipe "xmobar ~/.xmonad/xmobarrc"
 	xmonad $ defaultConfig
 		{
                   terminal    = "urxvt"
