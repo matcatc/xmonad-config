@@ -1,4 +1,6 @@
 -- 
+-- Note: colors given are simply a default, expect that they're overridden by
+-- comand line options
 
 Config {
 -- font = "xft:DejaVu Vera Sans Mono-8"
@@ -6,7 +8,7 @@ Config {
 -- font = "xft:Georgia:pixelsize=11"
        , bgColor      = "#000033"
        , fgColor      = "grey"
-       , position     = TopW L 90
+       , position     = BottomW L 90
        , lowerOnStart = True
        , commands     = [ Run StdinReader
 			, Run Date "%a %b %_d %l:%M" "date" 10

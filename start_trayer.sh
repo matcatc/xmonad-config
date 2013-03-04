@@ -11,5 +11,7 @@
 # based on the font used. So we'll need to change the height whenever we change
 # the font being used.
 
-trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --heighttype pixel --height 17 --transparent true --alpha 0 --tint 0x285577 &
+trayer --edge bottom --align right --SetDockType true --SetPartialStrut true \
+	--expand true --width 10 --heighttype pixel --height 17 \
+	--transparent true --alpha 0 --tint 0x285577 &
 

@@ -111,6 +111,51 @@ myManageHook = composeAll . concat $
 
 
 ---------------------------------------------------
+-- Log Hook related stuff
+---------------------------------------------------
+--
+-- This allows us to have multiple dynamicLogWithPP's. The main reason to do
+-- this is so we can have multiple xmobars (e.g: one up top and one at the
+-- bottom)
+--
+-- Note: I have no idea whether this is broken/buggy in some subtle way, as my
+-- Haskell (and particularly xmonad) experience is limited. In particular, I'm
+-- worried about the return / effect for X (). That being said, its currently
+-- working, so it can't be that bad.
+multiDynamicLogWithPP :: [PP] -> X ()
+multiDynamicLogWithPP [] = return ()
+multiDynamicLogWithPP [pp] = do
+	dynamicLogWithPP pp
+multiDynamicLogWithPP (pp:pps) = do
+	dynamicLogWithPP pp
+	multiDynamicLogWithPP pps
+
+-- Below are my PP's for my top and bottom xmobars. Since I run xmobar via a
+-- proc, and the procs are started in main and thus only in scope there, we
+-- pass them in as parameters.
+--
+-- I'm using ppOrder (order of workspaces, layout, title, and others) to remove
+-- components that I don't want shown in the particular xmobar. Much simpler
+-- than blanking out particular components.
+
+
+-- contains the window title info, but not much else
+xmobarTopPP proc = xmobarPP
+	{ ppOutput = hPutStrLn proc
+	, ppTitle = xmobarColor "white" ""
+	, ppOrder = \(_:_:title:_) -> [title]
+	}
+
+-- contains the layout and other extraneous info, but no title
+xmobarBottomPP proc = xmobarPP
+	{ ppOutput = hPutStrLn proc
+	, ppOrder = \(workspaces:layout:_:other) -> (workspaces:layout:other)
+	}
+
+
+
+
+---------------------------------------------------
 -- startup programs
 -- see: .xsession and .Xinitrc
 --
@@ -128,10 +173,14 @@ myManageHook = composeAll . concat $
 main = do
 	-- make sure that there's spaces in the concating of the string, so as
 	--  to prevent program args from running together
-	xmproc <- spawnPipe $ "xmobar"
+	xmobarTopProc <- spawnPipe $ "xmobar"
 			++ " --bgcolor=" ++ systemFGColor
 			++ " --fgcolor=" ++ lightGrey
-			++ " ~/.xmonad/xmobarrc"
+			++ " ~/.xmonad/xmobar_top_rc"
+	xmobarBottomProc <- spawnPipe $ "xmobar"
+			++ " --bgcolor=" ++ systemFGColor
+			++ " --fgcolor=" ++ lightGrey
+			++ " ~/.xmonad/xmobar_bottom_rc"
 	xmonad $ defaultConfig
 		{
                   terminal    = myTerminal
@@ -153,15 +202,15 @@ main = do
 		, workspaces = myWorkspaces
 
 		--
-		---  xmobar
-		--   see also: .xmobarrc
+		---  xmobars
+		--   see above for def of xmobarXPP's
 		--
 		-- TODO: configuration (particularly colors, etc.)
 		--
-		, logHook = dynamicLogWithPP xmobarPP
-			{ ppOutput = hPutStrLn xmproc
-			, ppTitle = xmobarColor "white" "" . shorten 50
-			}
+		, logHook = multiDynamicLogWithPP
+				[ xmobarTopPP xmobarTopProc
+				, xmobarBottomPP xmobarBottomProc
+				]
 		}
 
 

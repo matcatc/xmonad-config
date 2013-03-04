@@ -1,0 +1,20 @@
+-- 
+-- Note: colors given are simply a default, expect that they're overridden by
+-- comand line options
+
+Config {
+-- font = "xft:DejaVu Vera Sans Mono-8"
+ font = "xft:Consolas-8:style=bold"
+-- font = "xft:Georgia:pixelsize=11"
+       , bgColor      = "#000033"
+       , fgColor      = "grey"
+       , position     = Top
+       , lowerOnStart = True
+       , commands     = [ Run StdinReader
+			]
+       , sepChar      = "%"
+       , alignSep     = "}{"
+       , template     = " %StdinReader% "
+       }
+
+
