@@ -10,10 +10,11 @@ Config { font = "xft:Georgia:Bold:pixelsize=13"
 			, Run Date "%a %b %_d %l:%M" "date" 10
 			, Run Com "echo 'Mail: N/A'" [] "mail" 0
 			, Run Com "echo 'Vol: muted'" [] "myVolume" 0
+			, Run Com "echo 'pad: on'" [] "pad" 0
 			]
        , sepChar      = "%"
        , alignSep     = "}{"
-       , template     = " %StdinReader% }{ %mail% | %myVolume% | %date%"
+       , template     = " %StdinReader% }{ %pad% | %mail% | %myVolume% | %date%"
        }
 
 
