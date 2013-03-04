@@ -29,11 +29,10 @@ import XMonad.Layout.Tabbed
 -- TODO:
 --  wmii like action keys (e.g: shutdown, reboot)?
 --  configure xmobar
---  configure urxvt
 --  test out multihead support
 --  test out different layouts
 --  see if we can get any good window decorators
---  color scheme
+--  color scheme (similar to my current wmii color scheme)
 
 -- TODO:
 --  refactor
@@ -144,10 +143,25 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 
 
 -- my XMonad.Prompt configuration
+--
+-- I think alwaysHighlight will cause the prompts to be like in wmii (e.g:
+-- dmenu, tab switching) where the first autocompletion is automatically
+-- highlighted. So that simply pressing enter then results in this autocompletion
+-- to be selected. Currently, I have to press an extra tab to run a program.
+--
+-- Note: it appears this feature is in xmonad 0.11 but not 0.10. I'm currently
+-- running 0.10 (debian testing's package), and it fails to compile when I try
+-- to use it. Error given is: "'alwaysHighlight' is not a (visible) constructor
+-- field name"
+--
+-- Note: I don't like the autocompletion feature b/c it automatically selects
+-- it and acts as if we press enter. A typo could easily lead to running god knows
+-- what.
 myXPConfig = defaultXPConfig
 	{
 	  bgColor = "#000033"
 	, position = Top
+--	, alwaysHighlight = True
 	}
 
 
