@@ -25,60 +25,139 @@ import XMonad.Layout.Tabbed
 -- layout modifiers
 
 
---------------------------------------------------
--- TODO:
+---------------------------------------------------
+-- General TODOs
+---------------------------------------------------
 --  wmii like action keys (e.g: shutdown, reboot)?
 --  configure xmobar
 --  test out multihead support
 --  test out different layouts
 --  see if we can get any good window decorators
 --  color scheme (similar to my current wmii color scheme)
-
--- TODO:
+--
 --  refactor
 --  extract constants
 
 
 
-myModMask = mod1Mask
+---------------------------------------------------
+-- Constants
+---------------------------------------------------
+
+--
+--- color definitions
+--
+-- grays
+white 	   	= "#ffffff"
+darkGrey   	= "#222222"
+mediumGrey 	= "#777777"
+lightGrey  	= "#cccccc"
+
+-- yellows
+bronze 		= "#cd8b00"
+
+-- blues
+wmiiBlue 	= "#285577"
+darkBlue 	= "#000033"
 
 
+--
+--- general configurations
+--
+myTerminal 	= "urxvt"
+myModMask 	= mod1Mask
+
+
+--
+--- aesthetics
+--
+systemBGColor 	= lightGrey
+systemFGColor 	= wmiiBlue
+
+myBorderWidth 		= 3
+myNormalBorderColor 	= lightGrey
+myFocusedBorderColor 	= bronze
+
+
+
+---------------------------------------------------
 -- layouts
+---------------------------------------------------
 -- avoidStruts is for enabling docks (xmobar, dmenu)
 -- TODO: IM layout?
 myLayouts = Mirror tall ||| tall ||| StackTile 1 (3/100) (1/2) ||| Full ||| simpleTabbed
 	where
 		tall = Tall 1 (3/100) (1/2)
 
+
 -- apply layout modifiers
 myLayoutHook = avoidStruts $ myLayouts
 
 
+
+
+
+---------------------------------------------------
 -- workspaces
+---------------------------------------------------
 myWorkspaces = map show [0..9] ++ sort ["mail", "music", "upgrade", "im", "backup"]
 
 
+-- manage particular windows
+--  send them to particular workspaces or make the float, etc.
+myManageHook = composeAll . concat $
+	[]
+
+
+
+---------------------------------------------------
+-- startup programs
+-- see: .xsession and .Xinitrc
+--
+-- I'm not going to run programs on startup from my xmonad.hs (for the time
+-- being), b/c then whenever I reloaded xmonad (e.g: when testing out a
+-- configuration change), it'd end up also starting up those programs. Which means
+-- I'd end up with extra running copies, which I don't want.
+---------------------------------------------------
+
+
+
+---------------------------------------------------
 -- main
+---------------------------------------------------
 main = do
-	xmproc <- spawnPipe "xmobar ~/.xmonad/xmobarrc"
+	-- make sure that there's spaces in the concating of the string, so as
+	--  to prevent program args from running together
+	xmproc <- spawnPipe $ "xmobar"
+			++ " --bgcolor=" ++ systemFGColor
+			++ " --fgcolor=" ++ lightGrey
+			++ " ~/.xmonad/xmobarrc"
 	xmonad $ defaultConfig
 		{
-                  terminal    = "urxvt"
+                  terminal    = myTerminal
 		, modMask     = myModMask
 		, keys 	      = myKeys <+> keys defaultConfig
 
-		-- aesthetics
-		, borderWidth 	     = 3
-		, normalBorderColor  = "#cccccc"
-		, focusedBorderColor = "#cd8b00"		-- TODO: focused border color
+		--
+		--- aesthetics
+		--
+		, borderWidth 	     = myBorderWidth
+		, normalBorderColor  = myNormalBorderColor
+		, focusedBorderColor = myFocusedBorderColor
 
-		-- layouts and window management
-		, manageHook = manageDocks <+> manageHook defaultConfig
+		--
+		--- layouts and window management
+		--
+		, manageHook = myManageHook <+> manageDocks <+> manageHook defaultConfig
 		, layoutHook = myLayoutHook 
 		, workspaces = myWorkspaces
- 
-		--  xmobar
+
+		--
+		---  xmobar
 		--   see also: .xmobarrc
+		--
+		-- TODO: configuration (particularly colors, etc.)
+		--
 		, logHook = dynamicLogWithPP xmobarPP
 			{ ppOutput = hPutStrLn xmproc
 			, ppTitle = xmobarColor "white" "" . shorten 50
@@ -87,13 +166,13 @@ main = do
 
 
 
-
-	-----------------------
-	-- custom keybindings
-	-----------------------
-	--  TODO: clean up
-	--
+---------------------------------------------------
+-- custom keybindings
+---------------------------------------------------
+--  TODO: clean up
+--
 myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
+	-- program spawning
 	[
 --	  ((myModMask, xK_p), spawn "exe=`dmenu_path | dmenu -nb '#000033' -nf grey` && eval \"exec $exe\"")    -- Launch dmenu with our colors 
 	  ((myModMask, xK_p), shellPrompt myXPConfig)	-- like dmenu, but fits better with the rest of the theme
@@ -112,8 +191,8 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 
 	-- modified workspace switching keybindings
 	--  adds a workspace 0
-	--  removes emptyworkspaces (so its more similar to wmii)
-	--   doesn't remove workspaces in myWorkspaces (so only dynamically created ones)
+	--  removes empty workspaces (so its more similar to dynamic workspaces/tags in wmii)
+	--   doesn't remove workspaces in myWorkspaces (so only dynamically created ones are removed)
 	[((m .|. myModMask, k), removeEmptyWorkspaceAfterExcept myWorkspaces (windows $ f i))
 	    | (i, k) <- zip (XMonad.workspaces conf) ([xK_0 .. xK_9])
 	    , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
@@ -142,7 +221,9 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 
 
 
--- my XMonad.Prompt configuration
+---------------------------------------------------
+-- XMonad.Prompt configuration
+---------------------------------------------------
 --
 -- I think alwaysHighlight will cause the prompts to be like in wmii (e.g:
 -- dmenu, tab switching) where the first autocompletion is automatically
@@ -157,9 +238,11 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 -- Note: I don't like the autocompletion feature b/c it automatically selects
 -- it and acts as if we press enter. A typo could easily lead to running god knows
 -- what.
+--
+-- TODO: dimensions (to match xmobar)
 myXPConfig = defaultXPConfig
 	{
-	  bgColor = "#000033"
+	  bgColor = wmiiBlue -- darkBlue
 	, position = Top
 --	, alwaysHighlight = True
 	}
