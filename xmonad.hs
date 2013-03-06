@@ -1,18 +1,22 @@
 import XMonad
 
+-- for xmobar
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run (spawnPipe)
 
 import qualified Data.Map as M
 import Data.List (sort)
-import System.IO
+import System.IO (hPutStrLn)
 
 -- for dynamic workspaces
 import qualified XMonad.StackSet as W
 import XMonad.Actions.DynamicWorkspaces
-import XMonad.Actions.CopyWindow(copy)
+import XMonad.Actions.CopyWindow (copy)
+
+-- for prompts (used by various different features)
 import XMonad.Prompt
+import XMonad.Prompt.Input
 import XMonad.Prompt.Shell
 
 -- switching to next/prev workspace
@@ -28,14 +32,12 @@ import XMonad.Layout.Tabbed
 ---------------------------------------------------
 -- General TODOs
 ---------------------------------------------------
---  wmii like action keys (e.g: shutdown, reboot)?
---  configure xmobar
 --  test out multihead support
 --  test out different layouts
---  see if we can get any good window decorators
 --  color scheme (similar to my current wmii color scheme)
 --
 --  refactor
+--  reorder code blocks (main currently stuck in the middle)
 --  extract constants
 
 
@@ -122,7 +124,11 @@ myManageHook = composeAll . concat $
 -- Haskell (and particularly xmonad) experience is limited. In particular, I'm
 -- worried about the return / effect for X (). That being said, its currently
 -- working, so it can't be that bad.
+--
+-- My understanding is X () means that it effects the X monad but has no
+-- return. Ie: something on the screen changes.
 multiDynamicLogWithPP :: [PP] -> X ()
+-- No PP, so don't do anything
 multiDynamicLogWithPP [] = return ()
 multiDynamicLogWithPP [pp] = do
 	dynamicLogWithPP pp
@@ -167,9 +173,59 @@ xmobarBottomPP proc = xmobarPP
 
 
 
+
+---------------------------------------------------
+-- Action prompt
+---------------------------------------------------
+--
+-- like wmii's action list, which had special commands to give the computer
+-- much like running normal programs. E.g: shutdown, etc.
+--
+-- @see http://xmonad.org/xmonad-docs/xmonad-contrib/XMonad-Prompt-Input.html
+--
+-- There may be some modules provided which already do some of this
+-- functionality, but I didn't see it when implementing it.
+
+-- mapping from actions to "commands" to execute
+-- User configurable
+--
+-- TODO: make this a Map?
+myActions = [ ("poweroff", "gksudo poweroff")
+	, ("reboot", "gksudo reboot")
+	, ("test", "xmessage -default okay 'this is a test action'")
+	]
+
+-- list of actions above, for use in inputPrompt completion
+actionComplList = map fst myActions
+
+-- does the specified action
+-- TODO: better function name?
+doAction :: String -> X()
+doAction action =
+	case actionToCommand action of
+		Nothing      -> return ()
+		Just command -> spawn $ command
+
+-- takes a specified action and returns the "command" that would need to be run
+-- for the action to be completed. Think of command (here) to be whatever you'd
+-- need to type into a shell to do it.
+actionToCommand :: String -> Maybe String
+actionToCommand action = lookup action myActions
+
+
+-- an input prompt which can do the actions specified in actions.
+actionPrompt :: XPConfig -> X()
+actionPrompt config = inputPromptWithCompl config "" (mkComplFunFromList actionComplList) ?+ doAction
+
+
+
 ---------------------------------------------------
 -- main
 ---------------------------------------------------
+--
+-- Starts up all the necessary processes
+-- Then starts up xmonad with our modified version of the defaultConfig
+--
 main = do
 	-- make sure that there's spaces in the concating of the string, so as
 	--  to prevent program args from running together
@@ -205,8 +261,6 @@ main = do
 		---  xmobars
 		--   see above for def of xmobarXPP's
 		--
-		-- TODO: configuration (particularly colors, etc.)
-		--
 		, logHook = multiDynamicLogWithPP
 				[ xmobarTopPP xmobarTopProc
 				, xmobarBottomPP xmobarBottomProc
@@ -223,14 +277,12 @@ main = do
 myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 	-- program spawning
 	[
---	  ((myModMask, xK_p), spawn "exe=`dmenu_path | dmenu -nb '#000033' -nf grey` && eval \"exec $exe\"")    -- Launch dmenu with our colors 
 	  ((myModMask, xK_p), shellPrompt myXPConfig)	-- like dmenu, but fits better with the rest of the theme
-
+	, ((myModMask, xK_a), actionPrompt myXPConfig)	-- like wmii's action list (special comands to give the computer. E.g: shutdown, etc.)
 	]
 	++
 
 	-- dynamic workspaces
-	-- TODO: configure Prompt
 	[
 	  ((myModMask .|. shiftMask, xK_BackSpace), removeEmptyWorkspace)							-- remove current workspace
 	, ((myModMask              , xK_t        ), removeEmptyWorkspaceAfterExcept myWorkspaces (selectWorkspace myXPConfig))	-- select workspace
