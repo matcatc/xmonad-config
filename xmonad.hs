@@ -67,7 +67,7 @@ darkBlue 	= "#000033"
 --- general configurations
 --
 myTerminal 	= "urxvt"
-myModMask 	= mod1Mask
+myModMask 	= mod1Mask		-- TODO: try out mod4Mask (win key) at some point?
 
 
 --
@@ -306,11 +306,17 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 	-- main keybindings
 	  ((myModMask .|. shiftMask, xK_m), moveTo Next NonEmptyWS)
 	, ((myModMask .|. shiftMask, xK_n), moveTo Prev NonEmptyWS)
-	-- alternate keybindings (includes moving windows as well)
-	, ((myModMask              , xK_Right), moveTo Next NonEmptyWS)
-	, ((myModMask              , xK_Left), moveTo Prev NonEmptyWS)
-	, ((myModMask .|. shiftMask, xK_Right), shiftToNext >> nextWS)
-	, ((myModMask .|. shiftMask, xK_Left), shiftToPrev >> prevWS)
+
+	-- alternate keybindings (includes moving windows as well).
+	--
+	-- I personally don't use these, and I'll use Alt-Left all the time in
+	-- firefox to go back webpages, so I'm disabling these. But these are
+	-- very much like the ones you'd find in Gnome2/xfce, so I'll keep them
+	-- here commented out.
+--	, ((myModMask              , xK_Right), moveTo Next NonEmptyWS)
+--	, ((myModMask              , xK_Left), moveTo Prev NonEmptyWS)
+--	, ((myModMask .|. shiftMask, xK_Right), shiftToNext >> nextWS)
+--	, ((myModMask .|. shiftMask, xK_Left), shiftToPrev >> prevWS)
 	]
 
 	-- Example logging keybinding
