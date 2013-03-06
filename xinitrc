@@ -8,12 +8,12 @@
 
 # xinitrc
 #
-
-# from arch wiki
-#xsetroot -cursor_name left_ptr
-
 # from xmonad begginger's guide
 xrdb -merge .Xresources
+
+# from arch wiki/xmonad documentation
+# http://www.haskell.org/haskellwiki/Xmonad/Frequently_asked_question#Setting_the_X_cursor
+xsetroot -cursor_name left_ptr
 
 # fix the keys (specifically Return)
 xmodmap ~/.Xmodmap
