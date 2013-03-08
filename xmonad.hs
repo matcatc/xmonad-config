@@ -28,6 +28,9 @@ import XMonad.Layout.Tabbed
 
 -- layout modifiers
 
+-- keys
+import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
+
 
 ---------------------------------------------------
 -- General TODOs
@@ -322,6 +325,23 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 --	, ((myModMask .|. shiftMask, xK_Right), shiftToNext >> nextWS)
 --	, ((myModMask .|. shiftMask, xK_Left), shiftToPrev >> prevWS)
 	]
+	++
+
+	-- keybindings for audio
+	-- TODO: implement the actions
+	[
+	  ((0, xF86XK_AudioRaiseVolume), spawn "xmessage -default okay 'TODO: implement raise volume'")
+	, ((0, xF86XK_AudioLowerVolume), spawn "xmessage -default okay 'TODO: implement lower volume'")
+	, ((0, xF86XK_AudioMute       ), spawn "xmessage -default okay 'TODO: implement mute'")
+	, ((0, xF86XK_AudioPlay       ), spawn "xmessage -default okay 'TODO: implement play/pause'")
+	, ((0, xF86XK_AudioStop       ), spawn "xmessage -default okay 'TODO: implement stop'")
+	, ((0, xF86XK_AudioNext       ), spawn "xmessage -default okay 'TODO: implement next'")
+	, ((0, xF86XK_AudioPrev       ), spawn "xmessage -default okay 'TODO: implement prev'")
+	]
+
+	-- TODO: other speical keybindings?
+
+
 
 	-- Example logging keybinding
 --	[
