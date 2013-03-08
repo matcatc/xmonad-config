@@ -35,10 +35,13 @@ import XMonad.Layout.Tabbed
 --  test out multihead support
 --  test out different layouts
 --  color scheme (similar to my current wmii color scheme)
+--  new windows inserted below focused window (this is in the faq, not sure about which soln to choose though)
 --
 --  refactor
 --  reorder code blocks (main currently stuck in the middle)
 --  extract constants
+--
+--  make a custom keybindings file (using the svg provided for the defaults)
 
 
 
@@ -215,7 +218,7 @@ actionToCommand action = lookup action myActions
 
 -- an input prompt which can do the actions specified in actions.
 actionPrompt :: XPConfig -> X()
-actionPrompt config = inputPromptWithCompl config "" (mkComplFunFromList actionComplList) ?+ doAction
+actionPrompt config = inputPromptWithCompl config "Action" (mkComplFunFromList actionComplList) ?+ doAction
 
 
 
@@ -363,7 +366,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList
 myXPConfig = defaultXPConfig
 	{
 	  bgColor = wmiiBlue -- darkBlue
-	, position = Top
+	, position = Bottom		-- TODO: bottom vs top?
 --	, alwaysHighlight = True
 	}
 
