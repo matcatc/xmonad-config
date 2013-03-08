@@ -239,9 +239,10 @@ main = do
 			++ " ~/.xmonad/xmobar_bottom_rc"
 	xmonad $ defaultConfig
 		{
-                  terminal    = myTerminal
-		, modMask     = myModMask
-		, keys 	      = myKeys <+> keys defaultConfig
+                  terminal    	= myTerminal
+		, modMask     	= myModMask
+		, keys 	      	= myKeys <+> keys defaultConfig
+		, mouseBindings = myMouseBindings -- <+> mouseBindings defaultConfig
 
 		--
 		--- aesthetics
@@ -326,6 +327,18 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 --	++
 
 
+
+
+---------------------------------------------------
+-- Mouse bindings
+---------------------------------------------------
+myMouseBindings :: XConfig Layout -> M.Map (KeyMask, Button) (Window -> X ())
+myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList
+	[ ((modMask, 		     button1), \w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster)	-- float and move/drag
+	, ((modMask, 		     button2), windows . (W.shiftMaster .) . W.focusWindow)			-- raise to top of stack
+	, ((modMask, 		     button3), \w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster) 	-- float and resize
+	, ((myModMask .|. shiftMask, button1), \_ -> withFocused $ windows . W.sink) 				-- Push window back into tiling
+	]
 
 
 ---------------------------------------------------
