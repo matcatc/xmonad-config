@@ -31,6 +31,9 @@ import XMonad.Layout.Tabbed
 
 -- layout modifiers
 
+-- manage hooks
+import XMonad.Hooks.ManageHelpers
+
 -- keys
 import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
 
@@ -118,10 +121,21 @@ myWorkspaces = map show [0..9] ++ sort ["mail", "music", "upgrade", "im", "backu
 
 -- manage particular windows
 --  send them to particular workspaces or make the float, etc.
-myManageHook = composeAll
-	[ className =? "Xmessage" 	--> doFloat
-	, className =? "Pidgin" 	--> doShift "im"
-	]
+myManageHook = composeOne					-- applies the first one that matches
+	    [ checkDock              	-?> doIgnore 		-- equivalent to manageDocks
+
+	-- floating
+	    , isDialog               	-?> doFloat
+	    , className =? "Xmessage" 	-?> doFloat
+	    , className =? "Gimp"    	-?> doFloat
+	    , className =? "MPlayer" 	-?> doFloat
+
+	-- shifting
+	    , className =? "Pidgin" 	-?> doShift "im"
+
+	-- default
+	    , return True 		-?> doF W.swapDown	-- new windows appear one down
+	    ]
 
 
 
