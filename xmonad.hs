@@ -23,6 +23,9 @@ import XMonad.Prompt.Shell
 import XMonad.Actions.CycleWS
 
 -- layouts
+import Data.Ratio ((%))
+import XMonad.Layout.IM
+import XMonad.Layout.PerWorkspace
 import XMonad.Layout.StackTile
 import XMonad.Layout.Tabbed
 
@@ -93,9 +96,11 @@ myFocusedBorderColor 	= bronze
 ---------------------------------------------------
 -- avoidStruts is for enabling docks (xmobar, dmenu)
 -- TODO: IM layout?
-myLayouts = Mirror tall ||| tall ||| StackTile 1 (3/100) (1/2) ||| Full ||| simpleTabbed
+myLayouts = onWorkspace "im" im $
+	    Mirror tall ||| tall ||| StackTile 1 (3/100) (1/2) ||| Full ||| simpleTabbed
 	where
 		tall = Tall 1 (3/100) (1/2)
+		im = gridIM (1%7) (ClassName "Pidgin")
 
 
 -- apply layout modifiers
@@ -113,8 +118,10 @@ myWorkspaces = map show [0..9] ++ sort ["mail", "music", "upgrade", "im", "backu
 
 -- manage particular windows
 --  send them to particular workspaces or make the float, etc.
-myManageHook = composeAll . concat $
-	[]
+myManageHook = composeAll
+	[ className =? "Xmessage" 	--> doFloat
+	, className =? "Pidgin" 	--> doShift "im"
+	]
 
 
 
