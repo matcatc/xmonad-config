@@ -1,0 +1,52 @@
+#!/bin/sh
+#
+# This is the xinitrc startup script for xmonad
+#
+# Ideally, general xinitrc stuff would go in ~/.xinitrc. But I want to make
+# sure that everything is under source control, so I'm going to put the general
+# stuff in here instead. If we have more than 1 window manager we use (which is
+# unlikely), then we'll just have to duplicate it.
+# 
+
+
+# from xmonad begginger's guide, arch wiki for xinitrc, etc.
+xrdb -merge .Xresources
+
+
+# fix the keys (specifically Return)
+xmodmap ${HOME}/.Xmodmap
+
+
+# set root cursor
+#  so we'lll have a sane cursor when hovering over no window in particular
+# from arch wiki/xmonad documentation
+#  http://www.haskell.org/haskellwiki/Xmonad/Frequently_asked_question#Setting_the_X_cursor
+xsetroot -cursor_name left_ptr
+
+
+
+# background image
+# This doesn't seem to work for wmii if called before wmii is run
+#  Probably b/c wmii is "overwriting" the background on its own
+# Does work for xmonad however, and we're moving towards that anyways
+feh --bg-fill ${HOME}/.wallpaper.png &
+
+# start conky
+~/.conky/conky_start.sh &
+
+# start xscreensaver
+xscreensaver -no-splash &
+
+
+# TODO: battery notifications
+#  currently a wmii script
+
+
+
+
+# start trayer
+~/.xmonad/start_trayer.sh
+
+# start xmonad
+xmonad
+
