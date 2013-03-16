@@ -54,6 +54,9 @@ import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
 --  extract constants
 --
 --  make a custom keybindings file (using the svg provided for the defaults)
+--  
+--  lock screen keybinding
+--  print screen keybinding
 
 
 
