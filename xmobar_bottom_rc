@@ -10,7 +10,7 @@ Config {
 -- font = "xft:Georgia:pixelsize=11"
        , bgColor      = "#000033"
        , fgColor      = "grey"
-       , position     = BottomW L 90
+       , position     = BottomW L 91
        , lowerOnStart = True
        , commands     = [ Run StdinReader
 			, Run Date "%a %b %_d %l:%M" "date" 10
@@ -20,7 +20,7 @@ Config {
 			]
        , sepChar      = "%"
        , alignSep     = "}{"
-       , template     = " %StdinReader% }{ Pad: %pad% | Mail: %mail% | Vol: [%myVolume%] | %date%"
+       , template     = " %StdinReader% }{ Pad: %pad% | Mail: %mail% | Vol: [%myVolume%] | %date%     "
        }
 
 
