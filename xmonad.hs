@@ -7,7 +7,7 @@ import System.IO (hPutStrLn)
 import XMonad.Util.Run (spawnPipe)
 
 -- for various things
-import Data.List (sort)
+import Data.List (sort, foldl')
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 
@@ -143,26 +143,106 @@ myLayoutHook = avoidStruts $ myLayouts
 myWorkspaces = map show [0..9] ++ sort ["mail", "music", "upgrade", "im", "backup"]
 
 
--- manage particular windows
---  send them to particular workspaces or make the float, etc.
-myManageHook = composeOne						-- applies the first one that matches
-		[ checkDock              	-?> doIgnore 		-- equivalent to manageDocks
 
-		-- floating
-		, isDialog               	-?> doFloat
-		, className =? "Xmessage" 	-?> doFloat
-		, className =? "Gimp"    	-?> doFloat
-		, className =? "MPlayer" 	-?> doFloat
 
-		-- shifting
-        , className =? "Claws-mail" -?> doShift "mail"
-		, className =? "Pidgin" 	-?> doShift "im"
-        , className =? "SpiderOak"  -?> doShift "backup"
+
+
+
+
+
+
+
+------------------------------------------------------------------------------
+-- manage hooks
+------------------------------------------------------------------------------
+
+
+-- | A version of composeAll which returns a MaybeManageHook.
+--
+-- This is intended to be used within composeOne.
+--
+-- The reason to have something like this is as follows: imagine you have the
+-- following composeOne:
+--
+--      composeOne
+--          [ checkDock                 -?> doIgnore
+--          , isDialog                  -?> doFloat
+--          , className =? "Claws-mail" -?> doShift "mail"
+--          , return True               -?> doF W.swapDown
+--          ]
+--
+-- A composeOne is valuable here b/c we don't want to do the swapDown except in
+-- the default case (as described in the XMonad faq). But what if we want to
+-- combine the middle two hooks*? This is where this function comes in handy.
+-- We extract the middle two hooks and run them through composeAllMaybe,
+-- resulting in the following:
+--
+--      hooks =
+--          [ (isDialog                 , doFloat)
+--          , (className =? "Claws-mail", doShift "mail")
+--          ]
+--      composeOne
+--          [ checkDock                 -?> doIgnore
+--          , composeAllMaybe hooks
+--          , return True               -?> doF W.swapDown
+--          ]
+--
+--  Which has the following behavior:
+--      The composeOne is like you'd expect, goes down one at a time until it
+--      executes a hook. If our composeAllMaybe hook matches the window and
+--      executes, the composeOne will stop there. If not, it continues on.
+--
+--      The composeAll maybe is just like a composeAll. It executes all that
+--      match.
+--
+--
+-- * While you may disagree with the wisdom of doing this, as it may hide the
+-- dialogs for the mail client on a different workspace, it also ensures that
+-- the dialogs will be there (and not on some random workspace.)
+--          
+composeAllMaybe :: [(Query Bool, ManageHook)] -> MaybeManageHook
+composeAllMaybe l = (anyQuery l) -?> (composeAll $ makeDefiniteHooks l)
+
+-- | Creates the list of ManageHooks
+makeDefiniteHooks :: [(Query Bool, ManageHook)] -> [ManageHook]
+makeDefiniteHooks = map makeDefiniteHook
+    where
+        makeDefiniteHook (q, z) = q --> z
+
+-- | any query true
+anyQuery :: [(Query Bool, ManageHook)] -> Query Bool
+anyQuery l = foldl' (<||>) falseQuery querries
+    where querries = map fst l
+
+
+-- | constant query where bool is false
+falseQuery :: Query Bool
+falseQuery = liftX $ return False
+
+
+
+composeAllHooks = [
+        -- floating
+		  (isDialog                 , doCenterFloat)
+		, (className =? "Xmessage"  , doCenterFloat)
+		, (className =? "Gimp"      , doFloat)
+		, (className =? "MPlayer"   , doFloat)
+
+		-- shifting)
+		, (className =? "Claws-mail", doShift "mail")
+		, (className =? "Pidgin"    , doShift "im")
+		, (className =? "SpiderOak" , doShift "backup")
 
 		-- complex
+		]
 
+myManageHook = composeOne
+		[ checkDock     -?> doIgnore 		-- equivalent to manageDocks
+
+        , composeAllMaybe composeAllHooks
+		
 		-- default
-		, return True 			-?> doF W.swapDown	-- new windows appear one down
+		, return True   -?> doF W.swapDown	-- new windows appear one down
 		]
 
 
