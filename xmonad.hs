@@ -124,7 +124,7 @@ myLayouts = onWorkspace "im" im $
 
 		tall 	= Tall nmaster delta ratio
 		stack 	= StackTile nmaster delta ratio
-		im 	= gridIM (1%7) (ClassName "Pidgin")			-- TODO: test
+		im 	= gridIM (1%5) (Role "buddy_list")
 
 
 -- apply layout modifiers
