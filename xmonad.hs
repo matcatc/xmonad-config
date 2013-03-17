@@ -227,16 +227,31 @@ xmobarBottomPP proc = xmobarPP
 
 
 ------------------------------------------------------------------------------
--- startup programs
--- see: .xsession and .Xinitrc
+--startup programs see: .xsession and .Xinitrc
 --
--- I'm not going to run programs on startup from my xmonad.hs (for the time
--- being), b/c then whenever I reloaded xmonad (e.g: when testing out a
--- configuration change), it'd end up also starting up those programs. Which means
--- I'd end up with extra running copies, which I don't want.
+-- I'm trying to avoid running programs on startup from my xmonad.hs, b/c then
+-- whenever I reloaded xmonad (e.g: when testing out a configuration change),
+-- it'd end up also starting up those programs. Which means I'd end up with
+-- extra running copies, which I don't want.
 ------------------------------------------------------------------------------
+--
+-- Conky:
+--
+-- Conky is an edge case where if we let it remain from the previous xmonad
+-- invocation, it ends up messing with xmobar. One solution is to use
+-- 'own_window no' in the conkyrc file. But I have two conkys, which means that
+-- doing this causes them to interferre with eachother. It also appears that
+-- the 'own_window_type's desktop and panel have no effect in xmonad. Perhaps
+-- xmonad doesn't recognize the attributes that conky sets (or I haven't
+-- figured out how to make xmonad do so.)
+--
+-- So the easiest solution is to kill conky and restart it when doing a reload.
+-- The script called does both.
+--
 
-
+myStartupHook :: X ()
+myStartupHook = do
+        spawn "~/.conky/conky_start.sh"
 
 
 
@@ -479,9 +494,15 @@ main = do
 		--
 		--- layouts and window management
 		--
-		, manageHook = myManageHook <+> manageDocks <+> manageHook defaultConfig
-		, layoutHook = myLayoutHook
-		, workspaces = myWorkspaces
+		, manageHook      = myManageHook <+> manageDocks <+> manageHook defaultConfig
+		, layoutHook      = myLayoutHook
+		, workspaces      = myWorkspaces
+		, handleEventHook = docksEventHook <+> handleEventHook defaultConfig
+
+        --
+        --- other hooks
+        --
+        , startupHook = myStartupHook
 
 		--
 		---  xmobars
