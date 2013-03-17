@@ -1,6 +1,8 @@
 -- 
 -- Note: colors given are simply a default, expect that they're overridden by
 -- comand line options
+--
+-- Note: refresh rage for commands is in tenths of seconds
 
 Config {
 -- font = "xft:DejaVu Vera Sans Mono-8"
@@ -12,13 +14,13 @@ Config {
        , lowerOnStart = True
        , commands     = [ Run StdinReader
 			, Run Date "%a %b %_d %l:%M" "date" 10
-			, Run Com "echo 'Mail: N/A'" [] "mail" 0
-			, Run Com "echo 'Vol: muted'" [] "myVolume" 0
-			, Run Com "echo 'pad: on'" [] "pad" 0
+			, Run Com "~/.xmonad/scripts/check_mail.sh" [] "mail" 60
+			, Run Com "~/.xmonad/scripts/pulse_system_volume_status.py" [] "myVolume" 10
+			, Run Com "~/bin/touchpad.py" ["status"] "pad" 10
 			]
        , sepChar      = "%"
        , alignSep     = "}{"
-       , template     = " %StdinReader% }{ %pad% | %mail% | %myVolume% | %date%"
+       , template     = " %StdinReader% }{ Pad: %pad% | Mail: %mail% | Vol: [%myVolume%] | %date%"
        }
 
 
