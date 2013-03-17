@@ -52,14 +52,10 @@ import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
 --
 --  refactor
 --  extract constants
+--  
+--  update xmobar to actually display the info
 --
 --  make a custom keybindings file (using the svg provided for the defaults)
---  
---  lock screen keybinding
---  print screen keybinding
---  disable trackpad keybinding
---
---  update xmobar to actually display the info
 
 
 
@@ -415,7 +411,13 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 	++
 
 
-	-- TODO: other speical keybindings?
+	-- miscellaneous keybindings
+	[
+      ((mod4Mask,  xK_l    ), spawn "xscreensaver-command -lock")        -- note its mod4; TODO: switch workspaces?
+    , ((myModMask, xK_i    ), spawn "~/bin/touchpad.py toggle")
+    , ((0,         xK_Print), spawn "~/bin/print_screen.sh")
+    ]
+    ++
 
 
 
