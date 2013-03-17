@@ -57,6 +57,9 @@ import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
 --  
 --  lock screen keybinding
 --  print screen keybinding
+--  disable trackpad keybinding
+--
+--  update xmobar to actually display the info
 
 
 
@@ -400,15 +403,14 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 	++
 
 	-- keybindings for audio
-	-- TODO: implement the actions
 	[
-	  ((0, xF86XK_AudioRaiseVolume), spawn "xmessage -default okay 'TODO: implement raise volume'")
-	, ((0, xF86XK_AudioLowerVolume), spawn "xmessage -default okay 'TODO: implement lower volume'")
-	, ((0, xF86XK_AudioMute       ), spawn "xmessage -default okay 'TODO: implement mute'")
-	, ((0, xF86XK_AudioPlay       ), spawn "xmessage -default okay 'TODO: implement play/pause'")
-	, ((0, xF86XK_AudioStop       ), spawn "xmessage -default okay 'TODO: implement stop'")
-	, ((0, xF86XK_AudioNext       ), spawn "xmessage -default okay 'TODO: implement next'")
-	, ((0, xF86XK_AudioPrev       ), spawn "xmessage -default okay 'TODO: implement prev'")
+	  ((0, xF86XK_AudioRaiseVolume), spawn "~/bin/raise_volume.sh")
+	, ((0, xF86XK_AudioLowerVolume), spawn "~/bin/lower_volume.sh")
+	, ((0, xF86XK_AudioMute       ), spawn "~/bin/mute_volume.sh")
+	, ((0, xF86XK_AudioPlay       ), spawn "mpc toggle")
+	, ((0, xF86XK_AudioStop       ), spawn "mpc stop")
+	, ((0, xF86XK_AudioNext       ), spawn "mpc prev")
+	, ((0, xF86XK_AudioPrev       ), spawn "mpc next")
 	]
 	++
 
