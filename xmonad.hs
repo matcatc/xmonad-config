@@ -54,6 +54,7 @@ import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
 --  extract constants
 --  
 --  update xmobar to actually display the info
+--  gap between xmobar bottom and trayer
 --
 --  make a custom keybindings file (using the svg provided for the defaults)
 
@@ -154,7 +155,9 @@ myManageHook = composeOne						-- applies the first one that matches
 		, className =? "MPlayer" 	-?> doFloat
 
 		-- shifting
+        , className =? "Claws-mail" -?> doShift "mail"
 		, className =? "Pidgin" 	-?> doShift "im"
+        , className =? "SpiderOak"  -?> doShift "backup"
 
 		-- complex
 
