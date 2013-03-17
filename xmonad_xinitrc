@@ -38,9 +38,8 @@ feh --bg-fill ${HOME}/.wallpaper.png &
 xscreensaver -no-splash &
 
 
-# TODO: battery notifications
-#  currently a wmii script
-
+# battery notifications
+~/bin/battery_notify_daemon.py &
 
 
 
