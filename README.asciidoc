@@ -1,0 +1,84 @@
+Xmonad configuration Readme
+===========================
+:author: Matthew Todd
+:date: Mar 17, 2013
+
+
+Introduction
+------------
+
+This is my configuration for xmonad.
+
+
+Requirements
+------------
+
+XMonad and XMonad contrib :: I'm using version 0.10 (as I write this).
+
+xmobar :: I'm using version 0.14 (as I write this).
+
+bash :: Most/all shell scripts should be portable, but I didn't want to claim
+portability without testing it. Feel free to let me know if it is indeed
+portable, so I can update.
+
+python 3.x :: My python scripts are in python3, but should be easily backported
+if necessary. It is quite possible (I haven't checked) that importing `print()`
+may be all that's required.
+
+other scripts/utilites :: My configuration and xinitrc reference other scripts
+I have on my system, but aren't included in this repository. Many are general
+purpose scripts that would likely have to be changed to fit your system. Some
+are included in my other repositories. Feel free to ask for more info regarding
+these scripts if you would like it.
+
+
+Installation
+------------
+
+This repository gets dropped in `~/.xmonad/`.
+
+You'll also need to setup the xinitrc, either by symlinking it or calling it (I
+do the latter).
+
+
+Stuff you may want to copy
+--------------------------
+
+composeAllMany :: For manage hooks. Like `composeAll` but creates a
+`MaybeManageHook`, so can be used inside of a `composeOne`.
+
+
+License
+-------
+
+Given that XMonad is itself licensed under BSD-3 (according to wikipedia and
+the LICENSE file in the XMonad darcs repository), and I've looked at the
+source, faq, documentation, etc. to help with constructing my configuration, it
+feels best to release this under BSD-3 as well.
+
+Its not clear to me whether I'm supposed to include the XMonad's copyright
+notices, so I left them in as well.
+
+
+[WARNING]
+=============================
+Some of the scripts are licensed under GNU GPL v. 3, as they're based on ealier
+work of mine from my wmii configuration. If anyone has any issues with this,
+feel free to contact me and I should be able to relicense
+(dual-license/whatever) under BSD-3.
+=============================
+
+
+[NOTE]
+=============================
+I'm not putting this license information here to be strict or the like, but
+just to be thorough. Like most people writing configs and posting it on the
+internet, I'm not concerned about it.
+
+Even if you get some spark of insight from my configuration for some
+proprietary program (so it could be considered derivative), I don't
+particularly care. I doubt anything in here would really be worth copying for
+anything but a xmonad configuration anyways.
+
+If in doubt, ask.
+=============================
