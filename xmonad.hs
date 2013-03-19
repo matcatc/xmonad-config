@@ -31,6 +31,7 @@ import XMonad.Layout.StackTile
 import XMonad.Layout.Tabbed
 
 -- layout modifiers
+import XMonad.Hooks.UrgencyHook        -- installs itself as a layout modifier
 
 -- manage hooks
 import XMonad.Hooks.ManageHelpers
@@ -54,17 +55,28 @@ import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
 --  
 --  make a custom keybindings file (using the svg provided for the defaults)
 --
+--
 --  dynamically creating new workspaces puts them at the start of the workspace list (left of the numbers in xmobar)
 --   ideal solution: they'd be in sorted order (sorted numbers ++ sorted alphas)
 --      note: sort (alphanumerics) will put the numbers up front, like we want. So can just do: sort(workspaces)
 --   2nd best: appended to end of list
 --
---  workspace notifications when a window in that workspace "asks" for attention
---   ie: if a window in workspace im wants to notify that it needs attention,
---      the workspace should reflect that. Should look something like: "*im" or
---      perhaps a color change.
---   see urgencyHook: http://xmonad.org/xmonad-docs/xmonad-contrib/XMonad-Hooks-UrgencyHook.html
-
+--   May be possible to do in the xmobar via ppSort, but we need to make sure
+--   that the cycling keybindings match the order. It'd be weird if cycling
+--   left/right led to it jumping around workspaces.
+--
+--
+--  XMobar workspace coloring
+--   might be nice to have different colors for indicating info about the
+--   workspace. Perhaps use only colors to indicate current workspace even. See
+--   http://xmonad.org/xmonad-docs/xmonad-contrib/src/XMonad-Hooks-DynamicLog.html#xmobarPP
+--   for the defaultPP for our xmobar. It shows how to do the coloring.
+--
+--   Things we could use coloring for:
+--      current workspace
+--      visible workspace (ie: Xinerama)
+--      urgent workspace
+--
 
 
 
@@ -301,6 +313,7 @@ xmobarTopPP proc = xmobarPP
 xmobarBottomPP proc = xmobarPP
 	{ ppOutput = hPutStrLn proc
 	, ppOrder = \(workspaces:layout:_:other) -> (workspaces:layout:other)
+    , ppUrgent = \w -> '*':w
 	}
 
 
@@ -570,7 +583,8 @@ main = do
 			++ " --fgcolor=" ++ lightGrey
 			++ " ~/.xmonad/xmobar_bottom_rc"
 
-	xmonad $ defaultConfig
+	xmonad  $ withUrgencyHook NoUrgencyHook
+            $ defaultConfig
 		{
                   terminal    	= myTerminal
 		, modMask     	= myModMask
