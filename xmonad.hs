@@ -50,14 +50,20 @@ import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
 --  test out different layouts
 --  color scheme (similar to my current wmii color scheme)
 --
---  refactor
 --  extract constants
 --  
---  update xmobar to actually display the info
---  gap between xmobar bottom and trayer
---
 --  make a custom keybindings file (using the svg provided for the defaults)
-
+--
+--  dynamically creating new workspaces puts them at the start of the workspace list (left of the numbers in xmobar)
+--   ideal solution: they'd be in sorted order (sorted numbers ++ sorted alphas)
+--      note: sort (alphanumerics) will put the numbers up front, like we want. So can just do: sort(workspaces)
+--   2nd best: appended to end of list
+--
+--  workspace notifications when a window in that workspace "asks" for attention
+--   ie: if a window in workspace im wants to notify that it needs attention,
+--      the workspace should reflect that. Should look something like: "*im" or
+--      perhaps a color change.
+--   see urgencyHook: http://xmonad.org/xmonad-docs/xmonad-contrib/XMonad-Hooks-UrgencyHook.html
 
 
 
