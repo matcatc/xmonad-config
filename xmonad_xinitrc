@@ -32,7 +32,9 @@ xsetroot -cursor_name left_ptr
 feh --bg-fill ${HOME}/.wallpaper.png &
 
 # start conky
-~/.conky/conky_start.sh &
+#  we're starting conky from xmonad.hs so that it'll be restarted on every
+#  mod-q. That way it won't interfere with xmobar.
+#~/.conky/conky_start.sh &
 
 # start xscreensaver
 xscreensaver -no-splash &
