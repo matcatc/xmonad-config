@@ -14,6 +14,7 @@ import qualified XMonad.StackSet as W
 -- for dynamic workspaces
 import XMonad.Actions.CopyWindow (copy)
 import XMonad.Actions.DynamicWorkspaces
+import XMonad.Util.WorkspaceCompare (getSortByTag)     -- for keeping workspaces sorted
 
 -- for prompts (used by various different features)
 import XMonad.Prompt
@@ -56,14 +57,8 @@ import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
 --  make a custom keybindings file (using the svg provided for the defaults)
 --
 --
---  dynamically creating new workspaces puts them at the start of the workspace list (left of the numbers in xmobar)
---   ideal solution: they'd be in sorted order (sorted numbers ++ sorted alphas)
---      note: sort (alphanumerics) will put the numbers up front, like we want. So can just do: sort(workspaces)
---   2nd best: appended to end of list
---
---   May be possible to do in the xmobar via ppSort, but we need to make sure
---   that the cycling keybindings match the order. It'd be weird if cycling
---   left/right led to it jumping around workspaces.
+--  Leaving a workspace via cycling doesn't remove it if its empty (as mod-t, mod-[0..9] do)
+--    Simply need to use removeEmptyWorkspaceAfterExcept?
 --
 --
 --  XMobar workspace coloring
@@ -314,6 +309,7 @@ xmobarBottomPP proc = xmobarPP
 	{ ppOutput = hPutStrLn proc
 	, ppOrder = \(workspaces:layout:_:other) -> (workspaces:layout:other)
     , ppUrgent = \w -> '*':w
+    , ppSort = getSortByTag         -- show workspaces in lexicographical order
 	}
 
 
@@ -450,8 +446,15 @@ actionPrompt config = inputPromptWithCompl config "Action" (mkComplFunFromList a
 ------------------------------------------------------------------------------
 -- custom keybindings
 ------------------------------------------------------------------------------
---  TODO: clean up
---
+
+-- | Helper function for cycling workspaces in lexicographical order
+--  Uses findWorkspace to ensure workspaces are sorted lexographically, so
+--  as to match the order they appear in xmobar. See README for more info.
+cycleSorted :: Direction1D -> X ()
+cycleSorted dir = findWorkspace getSortByTag dir NonEmptyWS 1 >>= (windows . W.greedyView)
+
+
+
 myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 	-- program spawning
 	[
@@ -481,22 +484,10 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 	++
 
 	-- a basic CycleWS setup
-	--  allows cycling through the workspaces in order
+	--  Allows cycling through the workspaces in sorted lexicographical order.
 	[
-	-- main keybindings
-	  ((myModMask .|. shiftMask, xK_m), moveTo Next NonEmptyWS)
-	, ((myModMask .|. shiftMask, xK_n), moveTo Prev NonEmptyWS)
-
-	-- alternate keybindings (includes moving windows as well).
-	--
-	-- I personally don't use these, and I'll use Alt-Left all the time in
-	-- firefox to go back webpages, so I'm disabling these. But these are
-	-- very much like the ones you'd find in Gnome2/xfce, so I'll keep them
-	-- here commented out.
---	, ((myModMask              , xK_Right), moveTo Next NonEmptyWS)
---	, ((myModMask              , xK_Left), moveTo Prev NonEmptyWS)
---	, ((myModMask .|. shiftMask, xK_Right), shiftToNext >> nextWS)
---	, ((myModMask .|. shiftMask, xK_Left), shiftToPrev >> prevWS)
+	  ((myModMask .|. shiftMask, xK_m), cycleSorted Next)
+	, ((myModMask .|. shiftMask, xK_n), cycleSorted Prev)
 	]
 	++
 

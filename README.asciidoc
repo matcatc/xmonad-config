@@ -48,6 +48,102 @@ composeAllMany :: For manage hooks. Like `composeAll` but creates a
 `MaybeManageHook`, so can be used inside of a `composeOne`.
 
 
+Dynamic workspaces and workspace ordering
+-----------------------------------------
+
+Dynamically created workspaces are put on the head of the workspace list. This
+results in workspaces being out of order in xmobar, cycling, and workspace
+related prompts. Solutions are as follows:
+
+Xmobar
+~~~~~~
+
+Set `ppSort` to sort lexicographically. This is quite simple as
+`XMonad.Util.WorkspaceCompare` provides `getSortByTag` which does this.
+
+
+Cycling
+~~~~~~~
+
+Use `findWorkspace` which takes a sorting function argument, where we can again
+use `getSortByTag`. The solution is slightly messier than the original code (as
+shown below), but I feel its still rather straight forward. This could
+obviously be improved via helper functions, especially the alternate
+keybindings. But they're shown here in all their unrefactored glory.
+
+
+.Original cycling code (keybindings)
+---------------------------------
+    [
+    -- main keybindings
+	  ((myModMask .|. shiftMask, xK_m), moveTo Next NonEmptyWS)
+	, ((myModMask .|. shiftMask, xK_n), moveTo Prev NonEmptyWS)
+
+
+	-- alternate keybindings (includes moving windows as well).
+	, ((myModMask              , xK_Right), moveTo Next NonEmptyWS)
+	, ((myModMask              , xK_Left), moveTo Prev NonEmptyWS)
+	, ((myModMask .|. shiftMask, xK_Right), shiftToNext >> nextWS)
+	, ((myModMask .|. shiftMask, xK_Left), shiftToPrev >> prevWS)
+    ]
+---------------------------------
+
+.New cycling code (keybindings)
+---------------------------------
+    [
+	-- main keybindings
+	  ((myModMask .|. shiftMask, xK_m), findWorkspace getSortByTag Next NonEmptyWS 1 >>= (windows . W.greedyView))
+	, ((myModMask .|. shiftMask, xK_n), findWorkspace getSortByTag Prev NonEmptyWS 1 >>= (windows . W.greedyView))
+
+	-- alternate keybindings in gnome2 and xfce style (includes moving windows as well)
+	--	not tested, since I don't use them
+	, ((myModMask              , xK_Right), findWorkspace getSortByTag Next NonEmptyWS 1 >>= (windows . W.greedyView))
+	, ((myModMask              , xK_Left) , findWorkspace getSortByTag Prev NonEmptyWS 1 >>= (windows . W.greedyView))
+	, ((myModMask .|. shiftMask, xK_Right), findWorkspace getSortByTag Next NonEmptyWS 1 >>= (windows . W.shift)
+                                        >> findWorkspace getSortByTag Next NonEmptyWS 1 >>= (windows . W.greedyView))
+	, ((myModMask .|. shiftMask, xK_Left) , findWorkspace getSortByTag Prev NonEmptyWS 1 >>= (windows . W.shift)
+                                        >> findWorkspace getSortByTag Prev NonEmptyWS 1 >>= (windows . W.greedyView))
+    ]
+---------------------------------
+
+`findWorkspace` simply returns a workspace, which is then passed to the
+standard `windows` and `greedyView` combination. There are of course other
+powerful things we could do with minor tweaks.
+
+
+Workspace related prompts
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The xmonad contrib package `XMonad.Prompt.Workspace` provides the default
+`workspacePrompt` that `XMonad.Actions.DynamicWorkspaces` uses. So the solution
+would be to modify this prompt to use a lexicographical sorting function rather
+than an index one. Again, we could just use `getSortByTag`.
+
+But then we'd have to compile and use this version, instead of the one
+available in the repositories, and this is not something I'm willing to do.
+Especially for such a minor issue. So I haven't gone through the trouble to
+implement (or test) this solution, but I fairly confident it would work.
+
+Of course, if the sorting function was specified in XPConfig, this would be
+much easier, but its not.
+
+
+Conclusion
+~~~~~~~~~~
+
+I've implemented the first two solutions in my xmonad.hs because they're really
+easy and cover the more egregious behavior. I don't create new workspaces
+dynamically often, as any workspace I use with regularity is already in the
+workspaces list (which also means we can use it in the manage and layout
+hooks.) In addition, I don't look too closely when switching workspaces or the
+like at the entire list, as I usually start typing the workspace name
+immediately. So the fact that they're not in order won't be all that obvious,
+as the workspace will be mostly completed by the time I read the names. So the
+fact that they're not in order, while quite annoying to my engineering
+sensibilities, is minor.
+
+
+
 License
 -------
 
