@@ -48,6 +48,10 @@ xscreensaver -no-splash &
 # start trayer
 ~/.xmonad/start_trayer.sh
 
+
+# start ibus-daemon, for alternate language input
+ibus-daemon &
+
 # start xmonad
 xmonad
 
