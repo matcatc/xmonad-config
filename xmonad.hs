@@ -498,8 +498,8 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 	, ((0, xF86XK_AudioMute       ), spawn "~/bin/mute_volume.sh")
 	, ((0, xF86XK_AudioPlay       ), spawn "mpc toggle")
 	, ((0, xF86XK_AudioStop       ), spawn "mpc stop")
-	, ((0, xF86XK_AudioNext       ), spawn "mpc prev")
-	, ((0, xF86XK_AudioPrev       ), spawn "mpc next")
+	, ((0, xF86XK_AudioNext       ), spawn "mpc next")
+	, ((0, xF86XK_AudioPrev       ), spawn "mpc prev")
 	]
 	++
 
