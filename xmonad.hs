@@ -153,7 +153,7 @@ myLayoutHook = avoidStruts $ myLayouts
 ------------------------------------------------------------------------------
 -- workspaces
 ------------------------------------------------------------------------------
-myWorkspaces = map show [0..9] ++ sort ["mail", "music", "upgrade", "im", "backup"]
+myWorkspaces = map show [0..9] ++ sort ["mail", "music", "upgrade", "im", "backup", "finance"]
 
 
 
@@ -233,7 +233,7 @@ falseQuery :: Query Bool
 falseQuery = liftX $ return False
 
 
-
+-- | hooks that should be treated as a composeAll
 composeAllHooks = [
         -- floating
 		  (isDialog                 , doCenterFloat)
@@ -245,10 +245,12 @@ composeAllHooks = [
 		, (className =? "Claws-mail", doShift "mail")
 		, (className =? "Pidgin"    , doShift "im")
 		, (className =? "SpiderOak" , doShift "backup")
+        , (className =? "Gnucash"   , doShift "finance")
 
 		-- complex
 		]
 
+-- | My manageHook
 myManageHook = composeOne
 		[ checkDock     -?> doIgnore 		-- equivalent to manageDocks
 
