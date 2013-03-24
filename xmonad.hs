@@ -45,7 +45,6 @@ import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
 
 
 
-------------------------------------------------------------------------------
 -- General TODOs
 ------------------------------------------------------------------------------
 --  test out multihead support
@@ -72,6 +71,11 @@ import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
 --      visible workspace (ie: Xinerama)
 --      urgent workspace
 --
+--
+--  dialogs popping up under other dialog boxes (floating windows)
+--   it appears that my composeAllMaybe() trick wasn't enough, or I made a mistake somewhere
+--   Good test program: truecrypt
+--      starts as a dialog box, then can create another dialog box with "create volume"
 
 
 
