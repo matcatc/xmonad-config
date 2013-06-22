@@ -16,8 +16,15 @@
 
 
 
+# Should return almost immediately, so use timeout to limit it from going beserk
+status=$(timeout 2s claws-mail --status )
 
-status=$(claws-mail --status)
+# If it times out, then won't have any output
+if [ -z "$status" ]
+then
+    echo -n 'Timeout'
+    exit 1
+fi
 
 # the below comparison is what claws-mail prints out when its not
 # running. Using this rather than grepping ps output b/c that'll fail
@@ -30,4 +37,6 @@ then
 else
     echo -n "$status"
 fi
+
+exit 0
 
