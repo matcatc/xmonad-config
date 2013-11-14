@@ -14,9 +14,9 @@ Config {
        , lowerOnStart = True
        , commands     = [ Run StdinReader
 			, Run Date "%a %b %_d %l:%M" "date" 10
-			, Run Com "~/.xmonad/scripts/check_mail.sh" [] "mail" 60
-			, Run Com "~/.xmonad/scripts/pulse_system_volume_status.py" [] "myVolume" 10
-			, Run Com "~/bin/touchpad.py" ["status"] "pad" 10
+			, Run Com "/bin/bash" ["-c", "~/.xmonad/scripts/check_mail.sh"] "mail" 60
+			, Run Com "/bin/bash" ["-c", "~/.xmonad/scripts/pulse_system_volume_status.py"] "myVolume" 10
+			, Run Com "/bin/bash" ["-c", "~/bin/touchpad.py status"] "pad" 10
 			]
        , sepChar      = "%"
        , alignSep     = "}{"
