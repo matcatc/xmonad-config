@@ -3,6 +3,8 @@
 -- comand line options
 --
 -- Note: refresh rage for commands is in tenths of seconds
+-- Note: relative paths are relative to the run directory: $HOME (at least in
+--  my xmonad setup)
 
 Config {
 -- font = "xft:DejaVu Vera Sans Mono-8"
@@ -14,9 +16,9 @@ Config {
        , lowerOnStart = True
        , commands     = [ Run StdinReader
 			, Run Date "%a %b %_d %l:%M" "date" 10
-			, Run Com "/bin/bash" ["-c", "~/.xmonad/scripts/check_mail.sh"] "mail" 60
-			, Run Com "/bin/bash" ["-c", "~/.xmonad/scripts/pulse_system_volume_status.py"] "myVolume" 10
-			, Run Com "/bin/bash" ["-c", "~/bin/touchpad.py status"] "pad" 10
+			, Run Com "./.xmonad/scripts/check_mail.sh" [] "mail" 60
+			, Run Com "./.xmonad/scripts/pulse_system_volume_status.py" [] "myVolume" 10
+			, Run Com "/usr/bin/python3" ["./bin/touchpad.py", "status"] "pad" 10
 			]
        , sepChar      = "%"
        , alignSep     = "}{"
