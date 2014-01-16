@@ -238,18 +238,20 @@ falseQuery = liftX $ return False
 
 
 -- | hooks that should be treated as a composeAll
+-- Use xprop to find out this info
 composeAllHooks = [
         -- floating
-		  (isDialog                 , doCenterFloat)
-		, (className =? "Xmessage"  , doCenterFloat)
-		, (className =? "Gimp"      , doFloat)
-		, (className =? "MPlayer"   , doFloat)
+		  (isDialog                   , doCenterFloat)
+		, (className =? "Xmessage"    , doCenterFloat)
+		, (className =? "Gimp"        , doFloat)
+		, (className =? "MPlayer"     , doFloat)
 
 		-- shifting)
-		, (className =? "Claws-mail", doShift "mail")
-		, (className =? "Pidgin"    , doShift "im")
-		, (className =? "SpiderOak" , doShift "backup")
-        , (className =? "Gnucash"   , doShift "finance")
+		, (className =? "Claws-mail"  , doShift "mail")
+		, (className =? "Pidgin"      , doShift "im")
+		, (className =? "SpiderOak"   , doShift "backup")
+        , (className =? "Luckybackup" , doShift "backup")
+        , (className =? "Gnucash"     , doShift "finance")
 
 		-- complex
 		]
