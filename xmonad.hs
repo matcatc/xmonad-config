@@ -40,7 +40,8 @@ import XMonad.Hooks.ManageHelpers
 -- keys
 import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
 
-
+-- Pasting
+import XMonad.Util.Paste
 
 
 
@@ -514,9 +515,10 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 
 	-- miscellaneous keybindings
 	[
-      ((mod4Mask,  xK_l    ), spawn "xscreensaver-command -lock")        -- note its mod4; TODO: switch workspaces?
-    , ((myModMask, xK_i    ), spawn "~/bin/touchpad.py toggle")
-    , ((0,         xK_Print), spawn "~/bin/print_screen.sh")
+      ((mod4Mask,  xK_l     ), spawn "xscreensaver-command -lock")        -- note its mod4; TODO: switch workspaces?
+    , ((myModMask, xK_i     ), spawn "~/bin/touchpad.py toggle")
+    , ((0,         xK_Print ), spawn "~/bin/print_screen.sh")
+    , ((0,         xK_Insert), pasteSelection)
     ]
     ++
 
