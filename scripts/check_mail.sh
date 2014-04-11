@@ -21,7 +21,7 @@ KILL_TIMEOUT=137
 
 
 # Should return almost immediately, so use timeout to limit it from going beserk
-status=$(timeout 2s claws-mail --status )
+status=$(timeout --kill-after=4s 2s claws-mail --status )
 exit_code=$?
 
 # If it times out, then won't have any output
