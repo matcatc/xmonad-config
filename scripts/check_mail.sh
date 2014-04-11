@@ -14,13 +14,18 @@
 #
 # Matthew Todd
 
+# From timeout's man page
+# exit code when the timeout timesout.
+TERM_TIMEOUT=124
+KILL_TIMEOUT=137
 
 
 # Should return almost immediately, so use timeout to limit it from going beserk
 status=$(timeout 2s claws-mail --status )
+exit_code=$?
 
 # If it times out, then won't have any output
-if [ -z "$status" ]
+if [[ (( "$exit_code" -eq "$TERM_TIMEOUT" )) || (( "$exit_code" -eq "$KILL_TIMEOUT" )) ]]
 then
     echo -n 'Timeout'
     exit 1
