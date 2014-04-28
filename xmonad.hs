@@ -253,6 +253,7 @@ composeAllHooks = [
 		, (className =? "SpiderOak"   , doShift "backup")
         , (className =? "Luckybackup" , doShift "backup")
         , (className =? "Gnucash"     , doShift "finance")
+        , (className =? "Clementine"  , doShift "music")
 
 		-- complex
 		]
@@ -464,6 +465,7 @@ cycleSorted dir = findWorkspace getSortByTag dir NonEmptyWS 1 >>= (windows . W.g
 
 
 
+-- | My keybindings
 myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 	-- program spawning
 	[
