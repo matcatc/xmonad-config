@@ -507,10 +507,16 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 	  ((0, xF86XK_AudioRaiseVolume), spawn "~/bin/raise_volume.sh")
 	, ((0, xF86XK_AudioLowerVolume), spawn "~/bin/lower_volume.sh")
 	, ((0, xF86XK_AudioMute       ), spawn "~/bin/mute_volume.sh")
-	, ((0, xF86XK_AudioPlay       ), spawn "mpc toggle")
-	, ((0, xF86XK_AudioStop       ), spawn "mpc stop")
-	, ((0, xF86XK_AudioNext       ), spawn "mpc next")
-	, ((0, xF86XK_AudioPrev       ), spawn "mpc prev")
+    -- MPD setup
+--	, ((0, xF86XK_AudioPlay       ), spawn "mpc toggle")
+--	, ((0, xF86XK_AudioStop       ), spawn "mpc stop")
+--	, ((0, xF86XK_AudioNext       ), spawn "mpc next")
+--	, ((0, xF86XK_AudioPrev       ), spawn "mpc prev")
+  	-- Clementine setup
+	, ((0, xF86XK_AudioPlay       ), spawn "/usr/bin/clementine --play-pause")
+	, ((0, xF86XK_AudioStop       ), spawn "/usr/bin/clementine --stop")
+	, ((0, xF86XK_AudioNext       ), spawn "/usr/bin/clementine --next")
+	, ((0, xF86XK_AudioPrev       ), spawn "/usr/bin/clementine --previous")
 	]
 	++
 
