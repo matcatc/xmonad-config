@@ -52,6 +52,9 @@ xscreensaver -no-splash &
 # start ibus-daemon, for alternate language input
 ibus-daemon &
 
+# start pulse-audio (since autostart disabled)
+/usr/bin/start-pulseaudio-x11
+
 # start xmonad
 xmonad
 
