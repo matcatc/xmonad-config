@@ -503,6 +503,12 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 	]
 	++
 
+	-- Go to the previously viewed workspace
+	[
+	  ((myModMask, xK_BackSpace), toggleWS)		-- Go to previously viewed workspace
+	]
+	++
+
 	-- keybindings for audio
 	[
 	  ((0, xF86XK_AudioRaiseVolume), spawn "~/bin/raise_volume.sh")
