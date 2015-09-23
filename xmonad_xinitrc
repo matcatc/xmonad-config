@@ -55,6 +55,13 @@ ibus-daemon &
 # start pulse-audio (since autostart disabled)
 /usr/bin/start-pulseaudio-x11
 
+
+# Start redshift
+#  Send output to a file in /tmp for debugging after adding this line. We can
+#  later remove the log file.
+# 2015-05-10
+redshift & > /tmp/redshift.log
+
 # start xmonad
 xmonad
 
