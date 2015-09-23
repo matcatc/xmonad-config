@@ -266,7 +266,10 @@ myManageHook = composeOne
         , composeAllMaybe composeAllHooks
 		
 		-- default
-		, return True   -?> doF W.swapDown	-- new windows appear one down
+        -- At one point I used the following to make new windows show up below
+        -- the current window. However, this is rather annoying when dealing
+        -- with popups/dialogs, so I've since disabled it.
+--		, return True   -?> doF W.swapDown	-- new windows appear one down
 		]
 
 
