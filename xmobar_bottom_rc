@@ -15,7 +15,7 @@ Config {
        , position     = BottomW L 91
        , lowerOnStart = True
        , commands     = [ Run StdinReader
-			, Run Date "%F w%W.%u %l:%M %P" "date" 10
+			, Run Date "w%W.%u %F %l:%M %P" "date" 10
 			, Run Com "./.xmonad/scripts/check_mail.sh" [] "mail" 60
 			, Run Com "./.xmonad/scripts/pulse_system_volume_status.py" [] "myVolume" 10
 			, Run Com "/usr/bin/python3" ["./bin/touchpad.py", "status"] "pad" 10
