@@ -218,7 +218,7 @@ myWorkspaces = map show [0..9] ++ sort ["mail", "music", "upgrade", "im", "backu
 -- * While you may disagree with the wisdom of doing this, as it may hide the
 -- dialogs for the mail client on a different workspace, it also ensures that
 -- the dialogs will be there (and not on some random workspace.)
---          
+--
 composeAllMaybe :: [(Query Bool, ManageHook)] -> MaybeManageHook
 composeAllMaybe l = (anyQuery l) -?> (composeAll $ makeDefiniteHooks l)
 
@@ -256,6 +256,7 @@ composeAllHooks = [
         , (className =? "Gnucash"     , doShift "finance")
         , (className =? "Clementine"  , doShift "music")
         , (className =? "Ario"        , doShift "music")
+        , (className =? "Firefox"     , doShift "2")
 
 		-- complex
 		]
