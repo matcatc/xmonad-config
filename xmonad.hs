@@ -532,7 +532,9 @@ myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 --  	, ((0, xF86XK_AudioPrev       ), spawn "/usr/bin/clementine --previous")
     -- QuodLibet setup
   	, ((0, xF86XK_AudioPlay       ), spawn "/usr/bin/quodlibet --play-pause")
-  	, ((0, xF86XK_AudioStop       ), spawn "/usr/bin/quodlibet --stop-after=0")
+    -- stop-after=0 doesn't seem to work. Use pause to immediately stop the music, regardless of current state.
+  	--, ((0, xF86XK_AudioStop       ), spawn "/usr/bin/quodlibet --stop-after=0")
+  	, ((0, xF86XK_AudioStop       ), spawn "/usr/bin/quodlibet --pause")
   	, ((0, xF86XK_AudioNext       ), spawn "/usr/bin/quodlibet --next")
   	, ((0, xF86XK_AudioPrev       ), spawn "/usr/bin/quodlibet --previous")
 	]
