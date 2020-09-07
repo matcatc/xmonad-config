@@ -8,6 +8,11 @@
 # unlikely), then we'll just have to duplicate it.
 # 
 
+# TODO: some commands we do in the foreground, whereas some others we do in the
+# background. It's unclear how conscious we were about some of these choices,
+# so maybe consider making more of them started in the background to help speed
+# up the start?
+
 
 # from xmonad begginger's guide, arch wiki for xinitrc, etc.
 xrdb -merge .Xresources
@@ -22,7 +27,6 @@ xmodmap ${HOME}/.Xmodmap
 # from arch wiki/xmonad documentation
 #  http://www.haskell.org/haskellwiki/Xmonad/Frequently_asked_question#Setting_the_X_cursor
 xsetroot -cursor_name left_ptr
-
 
 
 # background image
@@ -52,8 +56,6 @@ xscreensaver -no-splash &
 # start ibus-daemon, for alternate language input
 ibus-daemon &
 
-# start pulse-audio (since autostart disabled)
-/usr/bin/start-pulseaudio-x11
 
 
 # Start redshift
@@ -63,5 +65,7 @@ ibus-daemon &
 redshift & > /tmp/redshift.log
 
 # start xmonad
-xmonad
+# Note for a long time (years) I've been starting xmonad without the exec.
+# Started using the exec on 2018-09-21.
+exec xmonad
 
