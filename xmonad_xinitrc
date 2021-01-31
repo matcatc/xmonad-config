@@ -14,6 +14,14 @@
 # up the start?
 
 
+# 2021-01-30
+# DBUS environment variables so that xmobar works. Would ideally add to
+# /etc/environment.d/, but that doesn't work.
+# See https://www.reddit.com/r/xmonad/comments/i699ix/xmobar_socket_error/.
+export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
+
+
 # from xmonad begginger's guide, arch wiki for xinitrc, etc.
 xrdb -merge .Xresources
 
