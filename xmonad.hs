@@ -252,6 +252,7 @@ composeAllHooks = [
 		, (className =? "Claws-mail"  , doShift "mail")
 		, (className =? "Pidgin"      , doShift "im")
 		, (className =? "SpiderOak"   , doShift "backup")
+		, (className =? "SpiderOakONE", doShift "backup")
         , (className =? "Luckybackup" , doShift "backup")
         , (className =? "Gnucash"     , doShift "finance")
         , (className =? "Clementine"  , doShift "music")
