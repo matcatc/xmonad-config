@@ -14,14 +14,6 @@
 # up the start?
 
 
-# 2021-01-30
-# DBUS environment variables so that xmobar works. Would ideally add to
-# /etc/environment.d/, but that doesn't work.
-# See https://www.reddit.com/r/xmonad/comments/i699ix/xmobar_socket_error/.
-export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
-
-
 # from xmonad begginger's guide, arch wiki for xinitrc, etc.
 xrdb -merge .Xresources
 
@@ -73,7 +65,9 @@ ibus-daemon &
 redshift & > /tmp/redshift.log
 
 # start xmonad
-# Note for a long time (years) I've been starting xmonad without the exec.
-# Started using the exec on 2018-09-21.
-exec xmonad
+# * 2018-09-21: Note for a long time (years) I've been starting xmonad without
+# the exec. Started using the exec on 2018-09-21.
+# * 2022-01-11: Added dbus-launch so that 1) xmobar works and 2) applications
+# that use dbus don't give "AccessDenied" errors.
+exec dbus-launch --exit-with-session xmonad
 
