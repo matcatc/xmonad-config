@@ -45,7 +45,7 @@ xscreensaver -no-splash &
 
 
 # battery notifications
-~/bin/battery_notify_daemon.py &
+~/bin/battery_notify_daemon.sh &
 
 
 
