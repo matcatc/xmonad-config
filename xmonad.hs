@@ -10,6 +10,7 @@ import XMonad.Util.Run (spawnPipe)
 import Data.List (sort, foldl')
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
+import XMonad.Config
 
 -- for dynamic workspaces
 import XMonad.Actions.CopyWindow (copy)
@@ -469,7 +470,7 @@ actionPrompt config = inputPromptWithCompl config "Action" (mkComplFunFromList m
 --  Uses findWorkspace to ensure workspaces are sorted lexographically, so
 --  as to match the order they appear in xmobar. See README for more info.
 cycleSorted :: Direction1D -> X ()
-cycleSorted dir = findWorkspace getSortByTag dir NonEmptyWS 1 >>= (windows . W.greedyView)
+cycleSorted dir = findWorkspace getSortByTag dir (XMonad.Actions.CycleWS.Not emptyWS) 1 >>= (windows . W.greedyView)
 
 
 
@@ -613,12 +614,12 @@ main = do
 			++ " --fgcolor=" ++ lightGrey
 			++ " ~/.xmonad/xmobar_bottom_rc"
 
-	xmonad  $ withUrgencyHook NoUrgencyHook
-            $ defaultConfig
+	xmonad  $ withUrgencyHook NoUrgencyHook . docks
+            $ def
 		{
                   terminal    	= myTerminal
 		, modMask     	= myModMask
-		, keys 	      	= myKeys <+> keys defaultConfig
+		, keys 	      	= myKeys <+> keys def
 		, mouseBindings = myMouseBindings
 
 		--
@@ -631,10 +632,9 @@ main = do
 		--
 		--- layouts and window management
 		--
-		, manageHook      = myManageHook <+> manageDocks <+> manageHook defaultConfig
+		, manageHook      = myManageHook <+> manageDocks <+> manageHook def
 		, layoutHook      = myLayoutHook
 		, workspaces      = myWorkspaces
-		, handleEventHook = docksEventHook <+> handleEventHook defaultConfig
 
         --
         --- other hooks

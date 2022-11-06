@@ -43,6 +43,12 @@ You'll also need to setup the xinitrc, either by symlinking it or calling it (I
 do the latter).
 
 
+Compilation
+------------
+Option 1 (preferred for when going to run): `xmonad --recompile`
+Option 2 (more useful when fixing compilation errors or warnings): `ghc xmonad.hs`
+
+
 Stuff you may want to copy
 --------------------------
 
