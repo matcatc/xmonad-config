@@ -39,7 +39,7 @@ import XMonad.Hooks.UrgencyHook        -- installs itself as a layout modifier
 import XMonad.Hooks.ManageHelpers
 
 -- keys
-import Graphics.X11.ExtraTypes.XF86	-- special key sybmols
+import Graphics.X11.ExtraTypes.XF86 -- special key sybmols
 
 -- Pasting
 import XMonad.Util.Paste
@@ -92,35 +92,35 @@ import XMonad.Util.Paste
 --- color definitions
 --
 -- grays
-white 	   	= "#ffffff"
-darkGrey   	= "#222222"
-mediumGrey 	= "#777777"
-lightGrey  	= "#cccccc"
+white       = "#ffffff"
+darkGrey    = "#222222"
+mediumGrey  = "#777777"
+lightGrey   = "#cccccc"
 
 -- yellows
-bronze 		= "#cd8b00"
+bronze      = "#cd8b00"
 
 -- blues
-wmiiBlue 	= "#285577"
-darkBlue 	= "#000033"
+wmiiBlue    = "#285577"
+darkBlue    = "#000033"
 
 
 --
 --- general configurations
 --
-myTerminal 	= "urxvt"
-myModMask 	= mod1Mask		-- TODO: try out mod4Mask (win key) at some point?
+myTerminal  = "urxvt"
+myModMask   = mod1Mask      -- TODO: try out mod4Mask (win key) at some point?
 
 
 --
 --- aesthetics
 --
-systemBGColor 	= lightGrey
-systemFGColor 	= wmiiBlue
+systemBGColor   = lightGrey
+systemFGColor   = wmiiBlue
 
-myBorderWidth 		= 3
-myNormalBorderColor 	= lightGrey
-myFocusedBorderColor 	= bronze
+myBorderWidth       = 3
+myNormalBorderColor     = lightGrey
+myFocusedBorderColor    = bronze
 
 
 
@@ -136,15 +136,15 @@ myFocusedBorderColor 	= bronze
 -- avoidStruts is for enabling docks (xmobar, trayer, etc.)
 myLayouts = onWorkspace "im" im $
         onWorkspace "mail" simpleTabbed $
-	    Mirror tall ||| tall ||| stack ||| Full ||| simpleTabbed		-- defaults
-	where
-		nmaster = 1
-		delta 	= 3/100
-		ratio 	= 1/2
+        Mirror tall ||| tall ||| stack ||| Full ||| simpleTabbed        -- defaults
+    where
+        nmaster = 1
+        delta   = 3/100
+        ratio   = 1/2
 
-		tall 	= Tall nmaster delta ratio
-		stack 	= StackTile nmaster delta ratio
-		im 	= gridIM (1%5) (Role "buddy_list")
+        tall    = Tall nmaster delta ratio
+        stack   = StackTile nmaster delta ratio
+        im  = gridIM (1%5) (Role "buddy_list")
 
 
 -- apply layout modifiers
@@ -244,16 +244,16 @@ falseQuery = liftX $ return False
 -- Use xprop to find out this info
 composeAllHooks = [
         -- floating
-		  (isDialog                   , doCenterFloat)
-		, (className =? "Xmessage"    , doCenterFloat)
-		, (className =? "Gimp"        , doFloat)
-		, (className =? "MPlayer"     , doFloat)
+          (isDialog                   , doCenterFloat)
+        , (className =? "Xmessage"    , doCenterFloat)
+        , (className =? "Gimp"        , doFloat)
+        , (className =? "MPlayer"     , doFloat)
 
-		-- shifting)
-		, (className =? "Claws-mail"  , doShift "mail")
-		, (className =? "Pidgin"      , doShift "im")
-		, (className =? "SpiderOak"   , doShift "backup")
-		, (className =? "SpiderOakONE", doShift "backup")
+        -- shifting)
+        , (className =? "Claws-mail"  , doShift "mail")
+        , (className =? "Pidgin"      , doShift "im")
+        , (className =? "SpiderOak"   , doShift "backup")
+        , (className =? "SpiderOakONE", doShift "backup")
         , (className =? "Luckybackup" , doShift "backup")
         , (className =? "Gnucash"     , doShift "finance")
         , (className =? "Clementine"  , doShift "music")
@@ -261,21 +261,21 @@ composeAllHooks = [
         , (className =? "Quodlibet"   , doShift "music")
         , (className =? "Firefox"     , doShift "2")
 
-		-- complex
-		]
+        -- complex
+        ]
 
 -- | My manageHook
 myManageHook = composeOne
-		[ checkDock     -?> doIgnore 		-- equivalent to manageDocks
+        [ checkDock     -?> doIgnore        -- equivalent to manageDocks
 
         , composeAllMaybe composeAllHooks
-		
-		-- default
+        
+        -- default
         -- At one point I used the following to make new windows show up below
         -- the current window. However, this is rather annoying when dealing
         -- with popups/dialogs, so I've since disabled it.
---		, return True   -?> doF W.swapDown	-- new windows appear one down
-		]
+--      , return True   -?> doF W.swapDown  -- new windows appear one down
+        ]
 
 
 
@@ -318,18 +318,18 @@ multiDynamicLogWithPP (pp:pps) = dynamicLogWithPP pp >> multiDynamicLogWithPP pp
 
 -- contains the window title info, but not much else
 xmobarTopPP proc = xmobarPP
-	{ ppOutput = hPutStrLn proc
-	, ppTitle = xmobarColor "white" ""
-	, ppOrder = \(_:_:title:_) -> [title]
-	}
+    { ppOutput = hPutStrLn proc
+    , ppTitle = xmobarColor "white" ""
+    , ppOrder = \(_:_:title:_) -> [title]
+    }
 
 -- contains the layout and other extraneous info, but no title
 xmobarBottomPP proc = xmobarPP
-	{ ppOutput = hPutStrLn proc
-	, ppOrder = \(workspaces:layout:_:other) -> (workspaces:layout:other)
+    { ppOutput = hPutStrLn proc
+    , ppOrder = \(workspaces:layout:_:other) -> (workspaces:layout:other)
     , ppUrgent = \w -> '*':w
     , ppSort = getSortByTag         -- show workspaces in lexicographical order
-	}
+    }
 
 
 
@@ -395,11 +395,11 @@ myStartupHook = do
 --
 -- TODO: dimensions (to match xmobar)
 myXPConfig = def
-	{
-	  bgColor = wmiiBlue -- darkBlue
-	, position = Bottom		-- TODO: bottom vs top?
---	, alwaysHighlight = True
-	}
+    {
+      bgColor = wmiiBlue -- darkBlue
+    , position = Bottom     -- TODO: bottom vs top?
+--  , alwaysHighlight = True
+    }
 
 
 
@@ -427,9 +427,9 @@ myXPConfig = def
 --
 -- TODO: make this a Map?
 myActions = [ ("poweroff", "gksudo poweroff")
-	, ("reboot", "gksudo reboot")
-	, ("test", "xmessage -default okay 'this is a test action'")
-	]
+    , ("reboot", "gksudo reboot")
+    , ("test", "xmessage -default okay 'this is a test action'")
+    ]
 
 -- list of actions above, for use in inputPrompt completion
 actionComplList = map fst myActions
@@ -438,9 +438,9 @@ actionComplList = map fst myActions
 -- TODO: better function name?
 doAction :: String -> X()
 doAction action =
-	case actionToCommand action of
-		Nothing      -> return ()
-		Just command -> spawn $ command
+    case actionToCommand action of
+        Nothing      -> return ()
+        Just command -> spawn $ command
 
 -- takes a specified action and returns the "command" that would need to be run
 -- for the action to be completed. Think of command (here) to be whatever you'd
@@ -476,75 +476,75 @@ cycleSorted dir = findWorkspace getSortByTag dir (XMonad.Actions.CycleWS.Not emp
 
 -- | My keybindings
 myKeys conf@(XConfig {XMonad.modMask = myModMask}) = M.fromList $
-	-- program spawning
-	[
-	  ((myModMask, xK_p), shellPrompt myXPConfig)	-- like dmenu, but fits better with the rest of the theme
-	, ((myModMask, xK_a), actionPrompt myXPConfig)	-- like wmii's action list (special comands to give the computer. E.g: shutdown, etc.)
-	]
-	++
+    -- program spawning
+    [
+      ((myModMask, xK_p), shellPrompt myXPConfig)   -- like dmenu, but fits better with the rest of the theme
+    , ((myModMask, xK_a), actionPrompt myXPConfig)  -- like wmii's action list (special comands to give the computer. E.g: shutdown, etc.)
+    ]
+    ++
 
-	-- dynamic workspaces
-	-- makes workspaces dynamic like in wmii and others, where they're
-	--  created on use and deleted when no longer needed.
-	[
-	  ((myModMask .|. shiftMask, xK_BackSpace), removeEmptyWorkspace)							-- remove current workspace
-	, ((myModMask              , xK_t        ), removeEmptyWorkspaceAfterExcept myWorkspaces (selectWorkspace myXPConfig))	-- select workspace
-	, ((myModMask .|. shiftMask, xK_t        ), withWorkspace myXPConfig (windows . W.shift))				-- shift window to workspace
-	]
-	++
+    -- dynamic workspaces
+    -- makes workspaces dynamic like in wmii and others, where they're
+    --  created on use and deleted when no longer needed.
+    [
+      ((myModMask .|. shiftMask, xK_BackSpace), removeEmptyWorkspace)                           -- remove current workspace
+    , ((myModMask              , xK_t        ), removeEmptyWorkspaceAfterExcept myWorkspaces (selectWorkspace myXPConfig))  -- select workspace
+    , ((myModMask .|. shiftMask, xK_t        ), withWorkspace myXPConfig (windows . W.shift))               -- shift window to workspace
+    ]
+    ++
 
-	-- modified workspace switching keybindings
-	--  adds a workspace 0
-	--  removes empty workspaces (so its more similar to dynamic workspaces/tags in wmii)
-	--   doesn't remove workspaces in myWorkspaces (so only dynamically created ones are removed)
-	[((m .|. myModMask, k), removeEmptyWorkspaceAfterExcept myWorkspaces (windows $ f i))
-	    | (i, k) <- zip (XMonad.workspaces conf) ([xK_0 .. xK_9])
-	    , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
-	]
-	++
+    -- modified workspace switching keybindings
+    --  adds a workspace 0
+    --  removes empty workspaces (so its more similar to dynamic workspaces/tags in wmii)
+    --   doesn't remove workspaces in myWorkspaces (so only dynamically created ones are removed)
+    [((m .|. myModMask, k), removeEmptyWorkspaceAfterExcept myWorkspaces (windows $ f i))
+        | (i, k) <- zip (XMonad.workspaces conf) ([xK_0 .. xK_9])
+        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
+    ]
+    ++
 
-	-- a basic CycleWS setup
-	--  Allows cycling through the workspaces in sorted lexicographical order.
-	[
-	  ((myModMask .|. shiftMask, xK_m), cycleSorted Next)
-	, ((myModMask .|. shiftMask, xK_n), cycleSorted Prev)
-	]
-	++
+    -- a basic CycleWS setup
+    --  Allows cycling through the workspaces in sorted lexicographical order.
+    [
+      ((myModMask .|. shiftMask, xK_m), cycleSorted Next)
+    , ((myModMask .|. shiftMask, xK_n), cycleSorted Prev)
+    ]
+    ++
 
-	-- Go to the previously viewed workspace
-	[
-	  ((myModMask, xK_BackSpace), toggleWS)		-- Go to previously viewed workspace
-	]
-	++
+    -- Go to the previously viewed workspace
+    [
+      ((myModMask, xK_BackSpace), toggleWS)     -- Go to previously viewed workspace
+    ]
+    ++
 
-	-- keybindings for audio
-	[
-	  ((0, xF86XK_AudioRaiseVolume), spawn "~/bin/raise_volume.sh")
-	, ((0, xF86XK_AudioLowerVolume), spawn "~/bin/lower_volume.sh")
-	, ((0, xF86XK_AudioMute       ), spawn "~/bin/mute_volume.sh")
+    -- keybindings for audio
+    [
+      ((0, xF86XK_AudioRaiseVolume), spawn "~/bin/raise_volume.sh")
+    , ((0, xF86XK_AudioLowerVolume), spawn "~/bin/lower_volume.sh")
+    , ((0, xF86XK_AudioMute       ), spawn "~/bin/mute_volume.sh")
     -- MPD setup
---	, ((0, xF86XK_AudioPlay       ), spawn "mpc toggle")
---	, ((0, xF86XK_AudioStop       ), spawn "mpc stop")
---	, ((0, xF86XK_AudioNext       ), spawn "mpc next")
---	, ((0, xF86XK_AudioPrev       ), spawn "mpc prev")
-  	-- Clementine setup
---  	, ((0, xF86XK_AudioPlay       ), spawn "/usr/bin/clementine --play-pause")
---  	, ((0, xF86XK_AudioStop       ), spawn "/usr/bin/clementine --stop")
---  	, ((0, xF86XK_AudioNext       ), spawn "/usr/bin/clementine --next")
---  	, ((0, xF86XK_AudioPrev       ), spawn "/usr/bin/clementine --previous")
+--  , ((0, xF86XK_AudioPlay       ), spawn "mpc toggle")
+--  , ((0, xF86XK_AudioStop       ), spawn "mpc stop")
+--  , ((0, xF86XK_AudioNext       ), spawn "mpc next")
+--  , ((0, xF86XK_AudioPrev       ), spawn "mpc prev")
+    -- Clementine setup
+--      , ((0, xF86XK_AudioPlay       ), spawn "/usr/bin/clementine --play-pause")
+--      , ((0, xF86XK_AudioStop       ), spawn "/usr/bin/clementine --stop")
+--      , ((0, xF86XK_AudioNext       ), spawn "/usr/bin/clementine --next")
+--      , ((0, xF86XK_AudioPrev       ), spawn "/usr/bin/clementine --previous")
     -- QuodLibet setup
-  	, ((0, xF86XK_AudioPlay       ), spawn "/usr/bin/quodlibet --play-pause")
+    , ((0, xF86XK_AudioPlay       ), spawn "/usr/bin/quodlibet --play-pause")
     -- stop-after=0 doesn't seem to work. Use pause to immediately stop the music, regardless of current state.
-  	--, ((0, xF86XK_AudioStop       ), spawn "/usr/bin/quodlibet --stop-after=0")
-  	, ((0, xF86XK_AudioStop       ), spawn "/usr/bin/quodlibet --pause")
-  	, ((0, xF86XK_AudioNext       ), spawn "/usr/bin/quodlibet --next")
-  	, ((0, xF86XK_AudioPrev       ), spawn "/usr/bin/quodlibet --previous")
-	]
-	++
+    --, ((0, xF86XK_AudioStop       ), spawn "/usr/bin/quodlibet --stop-after=0")
+    , ((0, xF86XK_AudioStop       ), spawn "/usr/bin/quodlibet --pause")
+    , ((0, xF86XK_AudioNext       ), spawn "/usr/bin/quodlibet --next")
+    , ((0, xF86XK_AudioPrev       ), spawn "/usr/bin/quodlibet --previous")
+    ]
+    ++
 
 
-	-- miscellaneous keybindings
-	[
+    -- miscellaneous keybindings
+    [
       ((mod4Mask,  xK_l     ), spawn "xscreensaver-command -lock")        -- note its mod4; TODO: switch workspaces?
     , ((myModMask, xK_i     ), spawn "~/bin/touchpad.py toggle")
     , ((0,         xK_Print ), spawn "~/bin/print_screen.sh")
@@ -554,18 +554,18 @@ myKeys conf@(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 
 
 
-	-- Example logging keybinding
---	[
---	  ((myModMask, xK_o), spawn ("echo \'" ++ show (XMonad.workspaces conf ) ++ "\' > /tmp/workspaces"))
---	]
---	++
+    -- Example logging keybinding
+--  [
+--    ((myModMask, xK_o), spawn ("echo \'" ++ show (XMonad.workspaces conf ) ++ "\' > /tmp/workspaces"))
+--  ]
+--  ++
 
 
-	-- empty list at the end makes it easier to comment out keybinding
-	-- blocks above. Because this way all blocks above have the (++) after
-	-- them, and then commenting out the last block doesn't cause us to
-	-- have to comment out a different block's (++)
-	[]
+    -- empty list at the end makes it easier to comment out keybinding
+    -- blocks above. Because this way all blocks above have the (++) after
+    -- them, and then commenting out the last block doesn't cause us to
+    -- have to comment out a different block's (++)
+    []
 
 
 
@@ -581,11 +581,11 @@ myKeys conf@(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 ------------------------------------------------------------------------------
 myMouseBindings :: XConfig Layout -> M.Map (KeyMask, Button) (Window -> X ())
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList
-	[ ((modMask, 		     button1), \w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster)	-- float and move/drag
-	, ((modMask, 		     button2), windows . (W.shiftMaster .) . W.focusWindow)			-- raise to top of stack
-	, ((modMask, 		     button3), \w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster) 	-- float and resize
-	, ((myModMask .|. shiftMask, button1), \_ -> withFocused $ windows . W.sink) 				-- Push window back into tiling
-	]
+    [ ((modMask,             button1), \w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster) -- float and move/drag
+    , ((modMask,             button2), windows . (W.shiftMaster .) . W.focusWindow)         -- raise to top of stack
+    , ((modMask,             button3), \w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster)   -- float and resize
+    , ((myModMask .|. shiftMask, button1), \_ -> withFocused $ windows . W.sink)                -- Push window back into tiling
+    ]
 
 
 
@@ -603,53 +603,53 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList
 -- Then starts up xmonad with our modified version of the defaultConfig
 --
 main = do
-	-- make sure that there's spaces in the concating of the string, so as
-	--  to prevent program args from running together
-	xmobarTopProc <- spawnPipe $ "xmobar"
-			++ " --bgcolor=" ++ systemFGColor
-			++ " --fgcolor=" ++ lightGrey
-			++ " ~/.xmonad/xmobar_top_rc"
-	xmobarBottomProc <- spawnPipe $ "xmobar"
-			++ " --bgcolor=" ++ systemFGColor
-			++ " --fgcolor=" ++ lightGrey
-			++ " ~/.xmonad/xmobar_bottom_rc"
+    -- make sure that there's spaces in the concating of the string, so as
+    --  to prevent program args from running together
+    xmobarTopProc <- spawnPipe $ "xmobar"
+            ++ " --bgcolor=" ++ systemFGColor
+            ++ " --fgcolor=" ++ lightGrey
+            ++ " ~/.xmonad/xmobar_top_rc"
+    xmobarBottomProc <- spawnPipe $ "xmobar"
+            ++ " --bgcolor=" ++ systemFGColor
+            ++ " --fgcolor=" ++ lightGrey
+            ++ " ~/.xmonad/xmobar_bottom_rc"
 
-	xmonad  $ withUrgencyHook NoUrgencyHook . docks
+    xmonad  $ withUrgencyHook NoUrgencyHook . docks
             $ def
-		{
-                  terminal    	= myTerminal
-		, modMask     	= myModMask
-		, keys 	      	= myKeys <+> keys def
-		, mouseBindings = myMouseBindings
+        {
+                  terminal      = myTerminal
+        , modMask       = myModMask
+        , keys          = myKeys <+> keys def
+        , mouseBindings = myMouseBindings
 
-		--
-		--- aesthetics
-		--
-		, borderWidth 	     = myBorderWidth
-		, normalBorderColor  = myNormalBorderColor
-		, focusedBorderColor = myFocusedBorderColor
+        --
+        --- aesthetics
+        --
+        , borderWidth        = myBorderWidth
+        , normalBorderColor  = myNormalBorderColor
+        , focusedBorderColor = myFocusedBorderColor
 
-		--
-		--- layouts and window management
-		--
-		, manageHook      = myManageHook <+> manageDocks <+> manageHook def
-		, layoutHook      = myLayoutHook
-		, workspaces      = myWorkspaces
+        --
+        --- layouts and window management
+        --
+        , manageHook      = myManageHook <+> manageDocks <+> manageHook def
+        , layoutHook      = myLayoutHook
+        , workspaces      = myWorkspaces
 
         --
         --- other hooks
         --
         , startupHook = myStartupHook
 
-		--
-		---  xmobars
-		--   see above for def of xmobarXPP's
-		--
-		, logHook = multiDynamicLogWithPP
-				[ xmobarTopPP xmobarTopProc
-				, xmobarBottomPP xmobarBottomProc
-				]
-		}
+        --
+        ---  xmobars
+        --   see above for def of xmobarXPP's
+        --
+        , logHook = multiDynamicLogWithPP
+                [ xmobarTopPP xmobarTopProc
+                , xmobarBottomPP xmobarBottomProc
+                ]
+        }
 
 
 
