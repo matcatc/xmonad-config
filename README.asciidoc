@@ -45,8 +45,9 @@ do the latter).
 
 Compilation
 ------------
-Option 1 (preferred for when going to run): `xmonad --recompile`
-Option 2 (more useful when fixing compilation errors or warnings): `ghc xmonad.hs`
+`xmonad --recompile` :: preferred for when going to run the finished binary
+`ghc xmonad.hs` :: more useful when fixing compilation errors or warnings
+Alt-Q :: Recompile XMonad and restart it while in XMonad. Useful to test out the changes.
 
 
 Stuff you may want to copy
