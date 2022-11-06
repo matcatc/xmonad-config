@@ -393,7 +393,7 @@ myStartupHook = do
 -- what.
 --
 -- TODO: dimensions (to match xmobar)
-myXPConfig = defaultXPConfig
+myXPConfig = def
 	{
 	  bgColor = wmiiBlue -- darkBlue
 	, position = Bottom		-- TODO: bottom vs top?
@@ -450,7 +450,7 @@ actionToCommand action = lookup action myActions
 
 -- an input prompt which can do the actions specified in actions.
 actionPrompt :: XPConfig -> X()
-actionPrompt config = inputPromptWithCompl config "Action" (mkComplFunFromList actionComplList) ?+ doAction
+actionPrompt config = inputPromptWithCompl config "Action" (mkComplFunFromList myXPConfig actionComplList) ?+ doAction
 
 
 
@@ -474,7 +474,7 @@ cycleSorted dir = findWorkspace getSortByTag dir NonEmptyWS 1 >>= (windows . W.g
 
 
 -- | My keybindings
-myKeys conf @(XConfig {XMonad.modMask = myModMask}) = M.fromList $
+myKeys conf@(XConfig {XMonad.modMask = myModMask}) = M.fromList $
 	-- program spawning
 	[
 	  ((myModMask, xK_p), shellPrompt myXPConfig)	-- like dmenu, but fits better with the rest of the theme
