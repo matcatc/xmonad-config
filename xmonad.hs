@@ -392,13 +392,12 @@ myStartupHook = do
 -- Note: I don't like the autocompletion feature b/c it automatically selects
 -- it and acts as if we press enter. A typo could easily lead to running god knows
 -- what.
---
--- TODO: dimensions (to match xmobar)
 myXPConfig = def
     {
       bgColor = wmiiBlue -- darkBlue
-    , position = Bottom     -- TODO: bottom vs top?
+    , position = Bottom
 --  , alwaysHighlight = True
+    , font              = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
     }
 
 
