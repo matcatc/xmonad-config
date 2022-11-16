@@ -122,7 +122,7 @@ myBorderWidth       = 3
 myNormalBorderColor     = lightGrey
 myFocusedBorderColor    = bronze
 
-
+myFont = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
 
 
 
@@ -135,16 +135,19 @@ myFocusedBorderColor    = bronze
 ------------------------------------------------------------------------------
 -- avoidStruts is for enabling docks (xmobar, trayer, etc.)
 myLayouts = onWorkspace "im" im $
-        onWorkspace "mail" simpleTabbed $
-        Mirror tall ||| tall ||| stack ||| Full ||| simpleTabbed        -- defaults
+        onWorkspace "mail" myTabbed $
+        Mirror tall ||| tall ||| stack ||| Full ||| myTabbed        -- defaults
     where
         nmaster = 1
         delta   = 3/100
         ratio   = 1/2
 
+        myTheme = def { fontName = myFont }
+
         tall    = Tall nmaster delta ratio
         stack   = StackTile nmaster delta ratio
         im  = gridIM (1%5) (Role "buddy_list")
+        myTabbed  = tabbed shrinkText myTheme
 
 
 -- apply layout modifiers
@@ -397,7 +400,7 @@ myXPConfig = def
       bgColor = wmiiBlue -- darkBlue
     , position = Bottom
 --  , alwaysHighlight = True
-    , font              = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-*-*"
+    , font = myFont
     }
 
 
